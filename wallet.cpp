@@ -14,6 +14,7 @@ void Wallet::TransferMoney(User & user)
     if(amount<0) //function to deposit money 
     {
         cout<<"Wrong amount"<<endl;
+        amount=0;
     }
     double currentBalance=user.getBalance();
     double newBalance=currentBalance+amount;
@@ -32,6 +33,7 @@ void Wallet::WithdrawMoney(User & user) //function to withdraw money
     if(amount>currentBalance)  
     {
         cout<<"Operation failed"<<endl;
+        amount=0;
     }
     double newBalance=currentBalance-amount;
     user.SetBalance(newBalance);
