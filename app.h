@@ -1,6 +1,7 @@
 #pragma once 
 #include "userprofile.h"
 #include "auth.h"
+#include "wallet.h"
 using namespace std;
 class App
 {
@@ -8,4 +9,6 @@ class App
     void Run();
     void UserMenu(User & user);
     int MainMenu();
+    void CouponMenu(User & user);
+    void WalletMenu(User & user);
 };

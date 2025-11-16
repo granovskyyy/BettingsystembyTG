@@ -31,7 +31,8 @@ string Authenication::HiddenPWD() //function to display passwords in secured way
 }
 void Authenication::RegisterUser() //registering new user 
 {
-    string login, password,mail;
+    string login, password;
+    double balance;
     bool takenLogin;
     cout<<"Register on BetPlanet"<<endl;
     do
@@ -82,7 +83,7 @@ void Authenication::RegisterUser() //registering new user
             ValidPWD=true;
         };
 
-    User user1(login, password,mail);
+    User user1(login,password,balance);
     users.push_back(user1); //adding new user to data base 
     cout<<"Welcome on BetPlanet!"<<endl;
 
@@ -90,7 +91,8 @@ void Authenication::RegisterUser() //registering new user
 }
 User Authenication::LoginSystem() //logging to system 
 {   
-    string login, password, mail;
+    string login, password;
+    double balance;
     bool isLogged=false;
     while(!isLogged)
     {
@@ -124,7 +126,7 @@ User Authenication::LoginSystem() //logging to system
        
         cout<<"Try again"<<endl;
     }
-    return User(login,password,mail);
+    return User(login,password,balance);
     
 
 }

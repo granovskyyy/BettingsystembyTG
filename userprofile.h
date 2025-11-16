@@ -5,10 +5,11 @@ class User
 {
     string username;
     string password;
-    string email;
+    double balance;
     public:
-    User(string u, string p, string e); //creating new user 
+    User(string u, string p, double b = 0.0); //creating new user 
     string getUsername() const;
     string getPassword() const; //getters for users data
-    string getEmail() const;
+    double getBalance() const;
+    void SetBalance(double b);
 };

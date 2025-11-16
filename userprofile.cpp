@@ -2,13 +2,10 @@
 #include <string>
 using namespace std;
 
-User::User(string u, string p, string m):username(u),password(p), email(m) {
-    u=username;
-    p=password;
-    m=email;
+User::User(string u, string p, double b):username(u),password(p), balance(b) {
 };
-string User::getEmail() const {return email;}
+double User::getBalance() const {return balance;}
 string User::getPassword() const {return password;}
 string User::getUsername() const {return username;}
-
+void User::SetBalance(double b) { balance=b;}
 

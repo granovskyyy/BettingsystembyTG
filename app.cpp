@@ -1,5 +1,4 @@
 #include "app.h"
-#include "auth.h"
 #include <iostream>
 using namespace std;
 
@@ -7,6 +6,7 @@ void App::Run()
 {
     vector <User> users;
     Authenication auth(users);
+   
     
     
     int op;
@@ -49,10 +49,10 @@ void App:: UserMenu(User & user)
             cout<<"Logging out..."<<endl;
             break;
         case 1:
-            cout<<"Under construction "<<endl;
+            CouponMenu(user);
             break;
         case 2:
-            cout<<"Under construction"<<endl;
+            WalletMenu(user);
             break;
         case 3:
             cout<<"Under construction"<<endl;
@@ -74,4 +74,67 @@ int App::MainMenu()
     cout<<"0. Exit\n";
     cin>>op;
     return op;
+}
+void App::CouponMenu(User& user)
+{
+    int op; 
+    do 
+    {
+          
+        cout<<"BETPLANET #69 BEST BETTING SYSTEM"<<endl; 
+        cout<<"1. Buy coupon\n";
+        cout<<"2. Coupons history\n";
+        cout<<"0. Exit\n";
+        cin>>op;
+        switch(op)
+        {
+            case 0:
+                break;
+            case 1:
+                cout<<"Under construction"<<endl;
+                break;
+            case 2:
+                cout<<"Under construction"<<endl;
+                break;
+            default:
+                cout<<"Invalid option "<<endl;
+            break;
+
+        }
+    }while(op!=0);
+
+}
+void App::WalletMenu(User& user)
+{
+    Wallet wallet;
+    int op; 
+    do 
+    {
+          
+        cout<<"BETPLANET #69 BEST BETTING SYSTEM"<<endl; 
+        cout<<"1. Account balance\n";
+        cout<<"2. Insert money\n";
+        cout<<"3. Withdraw money\n";
+        cout<<"0. Exit\n";
+        cin>>op;
+        switch(op)
+        {
+            case 0:
+                break;
+            case 1:
+                wallet.viewAccountBalance(user);
+                break;
+            case 2:
+                wallet.TransferMoney(user);
+                break;
+            case 3:
+                wallet.WithdrawMoney(user);
+                break;
+            default:
+                cout<<"Invalid option "<<endl;
+            break;
+
+        }
+    }while(op!=0);
+
 }
