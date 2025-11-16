@@ -24,7 +24,14 @@ void App::Run()
                 break;
             case 2:
                 User u=auth.LoginSystem();
-                UserMenu(u);
+                if(u.getUsername()=="")
+                {
+                    continue;
+                }
+                else
+                {
+                    UserMenu(u);
+                }
                 break;
         }
     } while (op!=0);

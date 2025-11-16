@@ -93,40 +93,46 @@ User Authenication::LoginSystem() //logging to system
 {   
     string login, password;
     double balance;
-    bool isLogged=false;
-    while(!isLogged)
+    
+    while(true)
     {
         cout<<"Login: "<<endl;
         getline(cin>>ws,login);
-        cout<<"Password"<<endl;
-        password=HiddenPWD();
         bool founduser=false; //to check if user is found in database
+        User logged("","",0);
         for(User i:users) //looking for user in database 
         {
             if(i.getUsername()==login)
             {
                 founduser=true;
-                if(i.getPassword()==password)
-                {
-                    cout<<"Login successfully"<<endl;
-                    return i;
-                }
-                else
-                {
-                    cout<<"Wrong password"<<endl;
-                    break;
-                }
-
+                logged=i;
+                break;
             }
         }
         if(!founduser)
         {
             cout<<"No user with these data"<<endl;
+            break;
         }
-       
-        cout<<"Try again"<<endl;
+        int pwdcount=0;
+        while(pwdcount<5)
+        {
+            cout<<"Password"<<endl;
+            password=HiddenPWD();
+            if(logged.getPassword()==password)
+            {
+                cout<<"Login successfully"<<endl;
+                return logged;
+            }
+            else
+            {
+                pwdcount++;
+                cout<<"Wrong password. Try again"<<endl;
+            };
+            
+        }
+        cout<<"Too many attempts of logging in"<<endl; 
+        break;
     }
-    return User(login,password,balance);
-    
-
+    return User("","",0);
 }
