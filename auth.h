@@ -1,9 +1,12 @@
 #pragma once
 #include "userprofile.h"
 #include <vector>
-#include <termios.h>
-#include <unistd.h>
-
+#if defined(_WIN64)
+    #include <conio.h>
+#else
+    #include <termios.h>
+    #include <unistd.h>
+#endif
 
 using namespace std;
 

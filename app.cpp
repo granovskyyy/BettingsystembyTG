@@ -1,5 +1,4 @@
 #include "app.h"
-#include "coupons.h"
 #include <iostream>
 using namespace std;
 
@@ -8,9 +7,6 @@ void App::Run()
     vector <User> users;
   
     Authenication auth(users);
-   
-    
-    
     int op;
  
     do
@@ -42,6 +38,7 @@ void App::Run()
 void App:: UserMenu(User & user)
 {
     int op;
+ 
 
     do 
     {
@@ -64,7 +61,7 @@ void App:: UserMenu(User & user)
             WalletMenu(user);
             break;
         case 3:
-            cout<<"Under construction"<<endl;
+            EventMenu(user);
             break;
         default:
             cout<<"Invalid option "<<endl;
@@ -86,15 +83,14 @@ int App::MainMenu()
 }
 void App::CouponMenu(User& user)
 {
-    vector <string> teams;
-    Coupons coupon;
+ 
 
     int op; 
     do 
     {
           
         cout<<"BETPLANET #69 BEST BETTING SYSTEM"<<endl; 
-        cout<<"1. Teams list\n";
+        cout<<"1. Your coupons\n";
         cout<<"2. Coupons history\n";
         cout<<"0. Exit\n";
         cin>>op;
@@ -103,11 +99,7 @@ void App::CouponMenu(User& user)
             case 0:
                 break;
             case 1:
-                teams=coupon.SaveTeams();
-                cout<<"TEAMS LIST"<<endl;
-                for (const auto& team : teams) {
-                    cout << team << endl;
-                }
+                cout<<"Under construction "<<endl;
                 break;
             case 2:
                 cout<<"Under construction"<<endl;
@@ -152,4 +144,78 @@ void App::WalletMenu(User& user)
         }
     }while(op!=0);
 
+}
+void App::EventMenu(User& user)
+{
+    vector <string> teams;
+    vector <pair<string,string>> fixtures; 
+    Fixtures fx;
+    
+    
+    
+   
+    int op;
+      do {
+        cout<<"BETPLANET #69 BEST BETTING SYSTEM"<<endl; 
+        cout<<"1. LaLiga\n";
+        cout<<"2. Premier League\n";
+        cout<<"3. Ekstraklasa \n";
+        cout<<"4. 1 Liga\n";
+        cout<<"0. Exit\n";
+        cin>>op;
+        switch(op)
+        {
+            case 0:
+                break;
+            case 1:
+                {
+                    fstream laliga("C:\\Users\\rt04\\Documents\\BettingsystembyTG\\teams\\laliga.txt"); //your filepath here 
+                    teams=fx.SaveTeams(laliga);
+                }
+                fixtures=fx.Matchmaking(teams);
+                for(int i=0;i<fixtures.size();i++)
+                {
+                    cout<<fixtures[i].first<<" : "<<fixtures[i].second<<endl;
+                }
+                break;
+            case 2:
+                {
+                    fstream pl("C:\\Users\\rt04\\Documents\\BettingsystembyTG\\teams\\premierleague.txt");
+                    teams=fx.SaveTeams(pl);
+                }
+                fixtures=fx.Matchmaking(teams);
+                for(int i=0;i<fixtures.size();i++)
+                {
+                    cout<<fixtures[i].first<<" : "<<fixtures[i].second<<endl;
+                }
+                break;
+            case 3:
+                {
+                    fstream eklapa("C:\\Users\\rt04\\Documents\\BettingsystembyTG\\teams\\eklapa.txt");
+                    teams=fx.SaveTeams(eklapa);
+                }
+                fixtures=fx.Matchmaking(teams);
+                for(int i=0;i<fixtures.size();i++)
+                {
+                    cout<<fixtures[i].first<<" : "<<fixtures[i].second<<endl;
+                }
+                break;
+            case 4:
+                {
+                    fstream wisla("C:\\Users\\rt04\\Documents\\BettingsystembyTG\\teams\\1liga.txt");
+                    teams=fx.SaveTeams(wisla);
+                }
+                fixtures=fx.Matchmaking(teams);
+                for(int i=0;i<fixtures.size();i++)
+                {
+                    cout<<fixtures[i].first<<" : "<<fixtures[i].second<<endl;
+                }
+                break;
+            default:
+                cout<<"Invalid option "<<endl;
+            break;
+
+        }
+        
+    }while(op!=0);
 }

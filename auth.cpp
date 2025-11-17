@@ -2,44 +2,75 @@
 #include <string.h> 
 //to secure passwords
 #include "auth.h"
-Authenication::Authenication(vector <User>& u): users(u){}; //constructor for authenication with vector of all users 
-int Authenication::mygetch() //special getch function for linux/macos users 
-{
-    int ch;
-    struct termios old_settings, new_settings;
-    tcgetattr(STDIN_FILENO, &old_settings);
-    new_settings = old_settings;
-    new_settings.c_lflag &= ~(ICANON | ECHO);
-    tcsetattr(STDIN_FILENO, TCSANOW, &new_settings);
-    ch = getchar();
-    tcsetattr(STDIN_FILENO, TCSANOW, &old_settings);
-    return ch;
-
-}
-string Authenication::HiddenPWD() //function to display passwords in secured way
-{
-    string password;
-    char c;
-    while((c=mygetch())!='\n') //enter
+#if defined(_WIN64) 
+    int Authenication::mygetch()
     {
-        if(c=='\b')
-        {
-            if(!password.empty())
-            {
-                cout<<"\b \b"; //backspace 
-                password.pop_back();
-            }
-
-        }
-        else
-        {
-            password +=c; //password changed to stars
-            cout<<"*";
-        }
+        return _getch();
     }
-    cout<<endl;
-    return password;
-}
+    string Authenication::HiddenPWD() //function to display passwords in secured way
+    {
+        string password;
+        char c;
+        while((c=mygetch())!='\r') //enter
+        {
+            if(c=='\b')
+            {
+                if(!password.empty())
+                {
+                    cout<<"\b \b"; //backspace 
+                    password.pop_back();
+                }
+
+            }
+            else
+            {
+                password +=c; //password changed to stars
+                cout<<"*";
+            }
+        }
+        cout<<endl;
+        return password;
+    }
+#else
+    int Authenication::mygetch() //special getch function for linux/macos users 
+    {
+        int ch;
+        struct termios old_settings, new_settings;
+        tcgetattr(STDIN_FILENO, &old_settings);
+        new_settings = old_settings;
+        new_settings.c_lflag &= ~(ICANON | ECHO);
+        tcsetattr(STDIN_FILENO, TCSANOW, &new_settings);
+        ch = getchar();
+        tcsetattr(STDIN_FILENO, TCSANOW, &old_settings);
+        return ch;
+
+    }
+    string Authenication::HiddenPWD() //function to display passwords in secured way
+    {
+        string password;
+        char c;
+        while((c=mygetch())!='\n') //enter
+        {
+            if(c=='\b')
+            {
+                if(!password.empty())
+                {
+                    cout<<"\b \b"; //backspace 
+                    password.pop_back();
+                }
+
+            }
+            else
+            {
+                password +=c; //password changed to stars
+                cout<<"*";
+            }
+        }
+        cout<<endl;
+        return password;
+    }
+#endif
+Authenication::Authenication(vector <User>& u): users(u){}; //constructor for authenication with vector of all users 
 void Authenication::RegisterUser() //registering new user 
 {
     string login, password;

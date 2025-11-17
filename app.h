@@ -2,7 +2,7 @@
 #include "userprofile.h"
 #include "auth.h"
 #include "wallet.h"
-#include "coupons.h"
+#include "fixtures.h"
 using namespace std;
 class App
 {
@@ -12,4 +12,5 @@ class App
     int MainMenu();
     void CouponMenu(User & user);
     void WalletMenu(User & user);
+    void EventMenu(User & user);
 };
