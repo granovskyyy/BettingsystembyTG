@@ -1,10 +1,12 @@
 #include "app.h"
+#include "coupons.h"
 #include <iostream>
 using namespace std;
 
 void App::Run()
 {
     vector <User> users;
+  
     Authenication auth(users);
    
     
@@ -84,12 +86,15 @@ int App::MainMenu()
 }
 void App::CouponMenu(User& user)
 {
+    vector <string> teams;
+    Coupons coupon;
+
     int op; 
     do 
     {
           
         cout<<"BETPLANET #69 BEST BETTING SYSTEM"<<endl; 
-        cout<<"1. Buy coupon\n";
+        cout<<"1. Teams list\n";
         cout<<"2. Coupons history\n";
         cout<<"0. Exit\n";
         cin>>op;
@@ -98,7 +103,11 @@ void App::CouponMenu(User& user)
             case 0:
                 break;
             case 1:
-                cout<<"Under construction"<<endl;
+                teams=coupon.SaveTeams();
+                cout<<"TEAMS LIST"<<endl;
+                for (const auto& team : teams) {
+                    cout << team << endl;
+                }
                 break;
             case 2:
                 cout<<"Under construction"<<endl;
@@ -109,7 +118,6 @@ void App::CouponMenu(User& user)
 
         }
     }while(op!=0);
-
 }
 void App::WalletMenu(User& user)
 {

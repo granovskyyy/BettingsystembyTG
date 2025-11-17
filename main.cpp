@@ -2,6 +2,7 @@
 #include "userprofile.h"
 #include "auth.h"
 #include "app.h"
+#include "coupons.h"
 using namespace std;
 int main()
 {
