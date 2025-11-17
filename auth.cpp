@@ -1,15 +1,26 @@
 #include <iostream>
-#include <string.h>
-#include <conio.h> //to secure passwords 
-
+#include <string.h> 
+//to secure passwords
 #include "auth.h"
-
 Authenication::Authenication(vector <User>& u): users(u){}; //constructor for authenication with vector of all users 
+int Authenication::mygetch() //special getch function for linux/macos users 
+{
+    int ch;
+    struct termios old_settings, new_settings;
+    tcgetattr(STDIN_FILENO, &old_settings);
+    new_settings = old_settings;
+    new_settings.c_lflag &= ~(ICANON | ECHO);
+    tcsetattr(STDIN_FILENO, TCSANOW, &new_settings);
+    ch = getchar();
+    tcsetattr(STDIN_FILENO, TCSANOW, &old_settings);
+    return ch;
+
+}
 string Authenication::HiddenPWD() //function to display passwords in secured way
 {
     string password;
     char c;
-    while((c=_getch())!='\r') //enter
+    while((c=mygetch())!='\n') //enter
     {
         if(c=='\b')
         {
