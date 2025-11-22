@@ -23,7 +23,7 @@ vector <pair<string,string>> Fixtures::Matchmaking(vector <string> teams)
 {
     srand(unsigned(time(0)));
     vector <pair<string,string>> matches;
-    shuffle(teams.begin(), teams.end(), mt19937(random_device()()));
+    shuffle(teams.begin(), teams.end(), mt19937(random_device()())); //randomizing teams 
     for(int i=0;i<teams.size();i+=2)
     {
         if(i+1<teams.size())

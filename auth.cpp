@@ -70,7 +70,7 @@
         return password;
     }
 #endif
-Authenication::Authenication(vector <User>& u): users(u){}; //constructor for authenication with vector of all users 
+Authenication::Authenication(vector <User>& u, Database& database): users(u), db(database) {}; //constructor for authenication with vector of all users 
 void Authenication::RegisterUser() //registering new user 
 {
     string login, password;
@@ -82,15 +82,16 @@ void Authenication::RegisterUser() //registering new user
         takenLogin=false;    //checking if login is taken (no same logins in database)
         cout<<"Enter nickname "<<endl;
         getline(cin>>ws,login);
-        for(const User&u:users)
+        string temppwd;
+        double tmpBalance;
+        if(db.getUser(login,temppwd,tmpBalance))
         {
-            if(u.getUsername()==login)
-            {
-                cout<<"This nickname is already taken or you are registred"<<endl;
-                takenLogin=true;
-                break;
-                
-            }
+            cout<<"This nickname is already taken or you are registred"<<endl;
+            takenLogin=true;
+        }
+        else
+        {
+            break;
         }
     }while(takenLogin);
       
@@ -127,6 +128,7 @@ void Authenication::RegisterUser() //registering new user
 
     User user1(login,password,balance);
     users.push_back(user1); //adding new user to data base 
+    db.addUser(user1.getUsername(),user1.getPassword(),user1.getBalance());
     cout<<"Welcome on BetPlanet!"<<endl;
 
   
@@ -140,31 +142,24 @@ User Authenication::LoginSystem() //logging to system
     {
         cout<<"Login: "<<endl;
         getline(cin>>ws,login);
-        bool founduser=false; //to check if user is found in database
-        User logged("","",0);
-        for(User i:users) //looking for user in database 
+        //bool founduser=false; //to check if user is found in database
+        //User logged("","",0);
+        string storedpwd;
+        double userbalance;
+        if(!db.getUser(login,storedpwd,userbalance))
         {
-            if(i.getUsername()==login)
-            {
-                founduser=true;
-                logged=i;
-                break;
-            }
-        }
-        if(!founduser)
-        {
-            cout<<"No user with these data"<<endl;
-            break;
+            cout<<"No user with this nickname"<<endl;
+            return User("","",0);
         }
         int pwdcount=0;
         while(pwdcount<5)
         {
             cout<<"Password"<<endl;
             password=HiddenPWD();
-            if(logged.getPassword()==password)
+            if(password==storedpwd)
             {
                 cout<<"Login successfully"<<endl;
-                return logged;
+                return User(login,password,userbalance);
             }
             else
             {

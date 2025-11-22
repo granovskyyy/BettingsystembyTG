@@ -1,7 +1,7 @@
 #include "wallet.h"
 #include <iostream>
 using namespace std;
-
+Wallet::Wallet(Database &database) :db(database) {};
 void Wallet::viewAccountBalance(User & user)
 {
     cout<<"Your balance: "<<user.getBalance()<<endl; //function used to view your acc balance 
@@ -16,9 +16,9 @@ void Wallet::TransferMoney(User & user)
         cout<<"Wrong amount"<<endl;
         amount=0;
     }
-    double currentBalance=user.getBalance();
-    double newBalance=currentBalance+amount;
+    double newBalance=user.getBalance()+amount;
     user.SetBalance(newBalance);
+    db.updateBalance(user.getUsername(),user.getBalance());
     cout<<"After money deposit: "<<user.getBalance()<<endl;
 
 
@@ -37,6 +37,7 @@ void Wallet::WithdrawMoney(User & user) //function to withdraw money
     }
     double newBalance=currentBalance-amount;
     user.SetBalance(newBalance);
+    db.updateBalance(user.getUsername(),user.getBalance());
     cout<<"After money withdraw: "<<user.getBalance()<<endl;
     
 }

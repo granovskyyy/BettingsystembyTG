@@ -1,5 +1,6 @@
 #pragma once
 #include "userprofile.h"
+#include "database.h"
 #include <vector>
 #if defined(_WIN64)
     #include <conio.h>
@@ -13,8 +14,9 @@ using namespace std;
 class Authenication
 {
     vector<User> users;
+    Database& db;
     public: 
-    Authenication(vector <User>& users);
+    Authenication(vector <User>& users, Database& db);
     int mygetch();
     User LoginSystem();
     void RegisterUser();

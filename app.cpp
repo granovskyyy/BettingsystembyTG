@@ -2,11 +2,13 @@
 #include <iostream>
 using namespace std;
 
+App::App(Database& database): db(database), wallet(database) {};
 void App::Run()
 {
     vector <User> users;
-  
-    Authenication auth(users);
+    Database db("C:/Users/rt04/Documents/BettingsystembyTG/users.db");
+    Authenication auth(users,db);
+    Wallet wallet(db);
     int op;
  
     do
@@ -113,7 +115,6 @@ void App::CouponMenu(User& user)
 }
 void App::WalletMenu(User& user)
 {
-    Wallet wallet;
     int op; 
     do 
     {
@@ -124,11 +125,18 @@ void App::WalletMenu(User& user)
         cout<<"3. Withdraw money\n";
         cout<<"0. Exit\n";
         cin>>op;
+        string pwd;
         switch(op)
         {
             case 0:
                 break;
             case 1:
+                
+                double balance;
+                if(db.getUser(user.getUsername(),pwd,balance))
+                {
+                    user.SetBalance(balance);
+                }
                 wallet.viewAccountBalance(user);
                 break;
             case 2:
