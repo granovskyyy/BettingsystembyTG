@@ -4,11 +4,14 @@
 #include "wallet.h"
 #include "fixtures.h"
 #include "database.h"
+#include <iomanip>
+class BetSystem;
 using namespace std;
 class App
 {
-    Database& db;
+    Database db;
     Wallet wallet;
+    BetSystem bets;
     public:
     App(Database& database);
     void Run();
@@ -17,4 +20,9 @@ class App
     void CouponMenu(User & user);
     void WalletMenu(User & user);
     void EventMenu(User & user);
+    void ShowActiveBets(User& user);
+    void ShowBetHistory(User& user);
+    void PlaceBet(User& user);
+    void ViewScores(User& user);
+
 };

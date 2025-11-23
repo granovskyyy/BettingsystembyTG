@@ -128,7 +128,8 @@ void Authenication::RegisterUser() //registering new user
 
     User user1(login,password,balance);
     users.push_back(user1); //adding new user to data base 
-    db.addUser(user1.getUsername(),user1.getPassword(),user1.getBalance());
+    unsigned int securePWD=hashPWD(password);
+    db.addUser(login,to_string(securePWD),balance);
     cout<<"Welcome on BetPlanet!"<<endl;
 
   
@@ -142,8 +143,6 @@ User Authenication::LoginSystem() //logging to system
     {
         cout<<"Login: "<<endl;
         getline(cin>>ws,login);
-        //bool founduser=false; //to check if user is found in database
-        //User logged("","",0);
         string storedpwd;
         double userbalance;
         if(!db.getUser(login,storedpwd,userbalance))
@@ -156,7 +155,8 @@ User Authenication::LoginSystem() //logging to system
         {
             cout<<"Password"<<endl;
             password=HiddenPWD();
-            if(password==storedpwd)
+            unsigned int securedPWD=hashPWD(password);
+            if(to_string(securedPWD)==storedpwd)
             {
                 cout<<"Login successfully"<<endl;
                 return User(login,password,userbalance);
@@ -172,4 +172,14 @@ User Authenication::LoginSystem() //logging to system
         break;
     }
     return User("","",0);
+}
+unsigned int Authenication::hashPWD(const string& password)
+{
+    int result=0;
+    for (char c:password)
+    {
+        result += c+(result<<3) + (result<<9) -result;
+
+    }
+    return result;
 }

@@ -21,5 +21,7 @@ class Authenication
     User LoginSystem();
     void RegisterUser();
     string HiddenPWD(); //function for hiding password
+    unsigned int hashPWD(const string& password);
+
 
 };
