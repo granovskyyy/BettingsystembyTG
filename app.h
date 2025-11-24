@@ -24,5 +24,6 @@ class App
     void ShowBetHistory(User& user);
     void PlaceBet(User& user);
     void ViewScores(User& user);
-
+    void AccountManager(User& user);
+    int readInt(int min,int max);
 };

@@ -9,15 +9,21 @@ Database::Database(const string& filename)
         cerr<<"Cannot open DB";
     }
 
-    const char* create_sql =
+    const char* create_users =
         "CREATE TABLE if NOT EXISTS users("
         "id INTEGER PRIMARY KEY AUTOINCREMENT,"
         "username TEXT UNIQUE NOT NULL,"
         "pwd TEXT NOT NULL,"
-        "balance REAL DEFAULT 0"
+        "balance REAL DEFAULT 0,"
+        "daily_bet_limit INTEGER DEFAULT 5,"
+        "daily_bet_count INTEGER DEFAULT 0,"
+        "last_bet_day TEXT,"
+        "withdrawal_limit REAL DEFAULT 100,"
+        "blocked INTEGER DEFAULT 0"
         ");";
  
-    sqlite3_exec(db, create_sql, nullptr, nullptr, nullptr);
+    sqlite3_exec(db,create_users,nullptr,nullptr,nullptr);
+
 
     const char* create_matches =
         "CREATE TABLE IF NOT EXISTS matches ("
@@ -292,4 +298,100 @@ vector <MatchEvent> Database::getMatchesID(const string& league)
     sqlite3_finalize(stmt);
     return out;
 }
+int Database::getIntValue(const string& table, const string& column, const string& username)
+{
+    string sql="SELECT"+column+" FROM "+table+" WHERE username =?";
+    sqlite3_stmt* stmt;
+
+    sqlite3_prepare_v2(db,sql.c_str(),-1,&stmt,nullptr);
+    sqlite3_bind_text(stmt,1,username.c_str(),-1,SQLITE_TRANSIENT);
+    int val=0;
+    if(sqlite3_step(stmt)==SQLITE_ROW)
+    {
+        val=sqlite3_column_int(stmt,0);
+    }
+    sqlite3_finalize(stmt);
+    return val;
+
+}
+double Database::getDoubleValue(const string& table, const string& column, const string& username)
+{
+    string sql="SELECT"+column+" FROM "+table+" WHERE username =?";
+    sqlite3_stmt* stmt;
+
+    sqlite3_prepare_v2(db,sql.c_str(),-1,&stmt,nullptr);
+    sqlite3_bind_text(stmt,1,username.c_str(),-1,SQLITE_TRANSIENT);
+    double val=0.0;
+    if(sqlite3_step(stmt)==SQLITE_ROW)
+    {
+        val=sqlite3_column_double(stmt,0);
+    }
+    sqlite3_finalize(stmt);
+    return val;
+
+}
+string Database::getStringValue(const string& table, const string& column, const string& username)
+{
+    string sql="SELECT"+column+" FROM "+table+" WHERE username =?";
+    sqlite3_stmt* stmt;
+
+    sqlite3_prepare_v2(db,sql.c_str(),-1,&stmt,nullptr);
+    sqlite3_bind_text(stmt,1,username.c_str(),-1,SQLITE_TRANSIENT);
+    string val="";
+    if(sqlite3_step(stmt)==SQLITE_ROW)
+    {
+        const unsigned char* text=sqlite3_column_text(stmt,0);
+        if(text) val=reinterpret_cast<const char*>(text);
+    }
+    sqlite3_finalize(stmt);
+    return val;
+
+}
+bool Database::updateIntValue(const string& username, const string& column, int value)
+{
+    string sql="UPDATE users SET "+column+" = ? WHERE username =?";
+    sqlite3_stmt* stmt;
+    sqlite3_prepare_v2(db,sql.c_str(),-1,&stmt,nullptr);
+    sqlite3_bind_int(stmt,1,value);
+    sqlite3_bind_text(stmt,2,username.c_str(),-1,SQLITE_TRANSIENT);
+
+    bool ok=(sqlite3_step(stmt)==SQLITE_DONE);
+    sqlite3_finalize(stmt);
+    return ok;
+}
+bool Database::updateDoubleValue(const string& username, const string& column, double value)
+{
+    string sql="UPDATE users SET "+column+" = ? WHERE username =?";
+    sqlite3_stmt* stmt;
+    sqlite3_prepare_v2(db,sql.c_str(),-1,&stmt,nullptr);
+    sqlite3_bind_double(stmt,1,value);
+    sqlite3_bind_text(stmt,2,username.c_str(),-1,SQLITE_TRANSIENT);
+
+    bool ok=(sqlite3_step(stmt)==SQLITE_DONE);
+    sqlite3_finalize(stmt);
+    return ok;
+}
+bool Database::updateStringValue(const string& username, const string& column, const string& value)
+{
+    string sql="UPDATE users SET "+column+" = ? WHERE username =?";
+    sqlite3_stmt* stmt;
+    sqlite3_prepare_v2(db,sql.c_str(),-1,&stmt,nullptr);
+    sqlite3_bind_text(stmt,1,value.c_str(),-1,SQLITE_TRANSIENT);
+    sqlite3_bind_text(stmt,2,username.c_str(),-1,SQLITE_TRANSIENT);
+
+    bool ok=(sqlite3_step(stmt)==SQLITE_DONE);
+    sqlite3_finalize(stmt);
+    return ok;
+}
+bool Database::incrementBets(const string& username)
+{
+    const char* sql = "UPDATE users SET daily_bet_count=daily_bet_count+1 WHERE username =?";
+    sqlite3_stmt* stmt;
+    sqlite3_prepare_v2(db,sql,-1,&stmt,nullptr);
+    sqlite3_bind_text(stmt,1,username.c_str(),-1,SQLITE_TRANSIENT);
+    bool ok=sqlite3_step(stmt)==SQLITE_DONE;
+    sqlite3_finalize(stmt);
+    return ok;
+}
+
 

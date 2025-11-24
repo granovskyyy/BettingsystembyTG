@@ -11,7 +11,6 @@ class Database{
     public: 
     Database(const string& filename);
     ~Database();
-
     bool addUser(const string& username, const string& pwd,double balance); //adding users to database
     bool getUser(const string& username, string& pwdOut,double& balanceout); //getting users' data
     bool updateBalance(const string& username, double newBalance);//updating users balance
@@ -25,5 +24,14 @@ class Database{
     vector <Bet> getPendingBets(const string& league);
     bool updateMatchResult(int matchID, const string& result);
     vector <MatchEvent> getMatchesID(const string& league);
-    
-};
+    //getters of data from columns 
+    int getIntValue(const string& table, const string& column, const string& username); 
+    double getDoubleValue(const string& table, const string& column, const string& username);
+    string getStringValue(const string& table, const string& column, const string& username);
+    //updating fields
+    bool updateIntValue(const string& username, const string& column, int value);
+    bool updateDoubleValue(const string& username, const string& column, double value);
+    bool updateStringValue(const string& username, const string& column, const string& value);
+    //increment bet counter
+    bool incrementBets(const string& username);
+};  

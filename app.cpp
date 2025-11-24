@@ -4,6 +4,26 @@
 using namespace std;
 
 App::App(Database& database): db(database), wallet(database),bets(database) {};
+int App::readInt(int min, int max)  //function to prevent unexcepted inputs
+{
+    int val;
+    while(true)
+    {
+        cout<<">";
+        if(cin >>val)
+        {
+            if(val>=min && val <= max)
+                return val;
+            cout<<"Invalid option, choose between "<<min<<" and "<<max<<"\n";
+        }
+        else
+        {
+            cin.clear();
+            cin.ignore(10000,'\n');
+            cout<<"Invalid input. Enter number\n";
+        }
+    }
+}
 void App::Run()
 {
     vector <User> users;
@@ -13,7 +33,6 @@ void App::Run()
     BetSystem bets(db);
  
     int op;
- 
     do
     {
         op=MainMenu();
@@ -43,19 +62,18 @@ void App::Run()
 void App:: UserMenu(User & user)
 {
     int op;
- 
-
+    
     do 
     {
+        
         cout<<"BETPLANET #69 BEST BETTING SYSTEM"<<endl; 
         cout<<"Welcome user "<<user.getUsername()<<endl;
         cout<<"1. Coupons\n";
         cout<<"2. Wallet \n";
         cout<<"3. Events today\n";
-        cout<<"4. Place a bet\n";
-        cout<<"5. View scores\n";
+        cout<<"4. Account Managment\n";
         cout<<"0. Logout"<<endl;
-        cin>>op;
+        op=readInt(0,4);
         switch(op)
         {
         case 0:
@@ -71,10 +89,7 @@ void App:: UserMenu(User & user)
             EventMenu(user);
             break;
         case 4:
-            PlaceBet(user);
-            break;
-        case 5:
-            ViewScores(user);
+            AccountManager(user); 
             break;
         default:
             cout<<"Invalid option "<<endl;
@@ -91,7 +106,7 @@ int App::MainMenu()
     cout<<"1. Register \n";
     cout<<"2. Login\n";
     cout<<"0. Exit\n";
-    cin>>op;
+    op=readInt(0,2);
     return op;
 }
 void App::CouponMenu(User& user)
@@ -103,23 +118,23 @@ void App::CouponMenu(User& user)
     {
           
         cout<<"BETPLANET #69 BEST BETTING SYSTEM"<<endl; 
-        cout<<"1. Your coupons\n";
-        cout<<"2. Coupons history\n";
-        cout<<"3. Place coupon\n";
+        cout<<"1. Place coupon\n";
+        cout<<"2. Your coupons\n";
+        cout<<"3. Coupons history\n";
         cout<<"0. Exit\n";
-        cin>>op;
+        op=readInt(0,3);
         switch(op)
         {
             case 0:
                 break;
             case 1:
-                ShowActiveBets(user);
+                PlaceBet(user);
                 break;
             case 2:
-                ShowBetHistory(user);
+                ShowActiveBets(user);
                 break;
             case 3:
-                cout<<"Under construction"<<endl;
+                ShowBetHistory(user);
                 break;
             default:
                 cout<<"Invalid option "<<endl;
@@ -139,7 +154,7 @@ void App::WalletMenu(User& user)
         cout<<"2. Insert money\n";
         cout<<"3. Withdraw money\n";
         cout<<"0. Exit\n";
-        cin>>op;
+        op=readInt(0,3);
         string pwd;
         switch(op)
         {
@@ -173,6 +188,7 @@ void App::EventMenu(User& user)
 {
     vector <string> teams;
     vector <MatchEvent> fixtures; 
+    vector <string> leagues={"LaLiga", "PremierLeague","Ekstraklasa","1liga"};
     Fixtures fx;
     int op;
       do {
@@ -182,30 +198,44 @@ void App::EventMenu(User& user)
         cout<<"2. Premier League\n";
         cout<<"3. Ekstraklasa \n";
         cout<<"4. 1 Liga\n";
+        cout<<"5. Results\n";
         cout<<"0. Exit\n";
-        cin>>op;
+        op=readInt(0,5);
         string league;
         string filepath;
+        
         switch(op)
         {
             case 0:
                 break;
             case 1:
                 league="LaLiga";
-                filepath="C:\\Users\\rt04\\Documents\\BettingsystembyTG\\teams\\laliga.txt";
+                filepath="C:\\Users\\rt04\\Documents\\BettingsystembyTG\\teams\\laliga.txt"; //YOUR FILEPATH HERE
                 break;
             case 2:
-                    league="PremierLeague";
-                    filepath="C:\\Users\\rt04\\Documents\\BettingsystembyTG\\teams\\premierleague.txt";
+                league="PremierLeague";
+                filepath="C:\\Users\\rt04\\Documents\\BettingsystembyTG\\teams\\premierleague.txt"; //YOUR FILEPATH HERE
                     break;             
             case 3:
-                    league="Ekstraklasa";
-                    filepath="C:\\Users\\rt04\\Documents\\BettingsystembyTG\\teams\\eklapa.txt";
+                league="Ekstraklasa";
+
+                filepath="C:\\Users\\rt04\\Documents\\BettingsystembyTG\\teams\\eklapa.txt"; //YOUR FILEPATH HERE
                     break;
             case 4:
-                    league="1liga";
-                    filepath="C:\\Users\\rt04\\Documents\\BettingsystembyTG\\teams\\1liga.txt";
-                    break;
+                league="1liga";
+                filepath="C:\\Users\\rt04\\Documents\\BettingsystembyTG\\teams\\1liga.txt"; //YOUR FILEPATH HERE
+                break;
+            case 5:
+                if(leagues.empty())
+                {
+                    cout<<"Wait for final results"<<endl;
+                    continue;
+                }
+                for(auto& l:leagues)
+                {
+                    bets.resolveLeague(l);
+                }
+                continue;
             default:
                 cout<<"Invalid option "<<endl;
                 continue;
@@ -264,10 +294,10 @@ void App::ShowBetHistory(User& user)
 {
     auto bets=db.getUserBets(user.getUsername());
     cout<<"BET HISTORY"<<endl;
-        bool any=false;
+    bool any=false;
     for(auto&b :bets)
     {
-        if(b.status=="WON "||b.status=="LOST")
+        if(b.status=="WON"||b.status=="LOST")
         {
             any=true;
             cout<<"Match: "<<b.team1<<" vs"<<b.team2<<endl;
@@ -299,7 +329,7 @@ void App::PlaceBet(User & user)
         cout<<"3. Ekstraklasa \n";
         cout<<"4. 1 Liga\n";
         cout<<"0. Back\n";
-        cin>>op;
+        op=readInt(0,4);
         string league;
         switch(op)
         {
@@ -357,7 +387,7 @@ void App::PlaceBet(User & user)
         double stake;
         cout<<"Stake amount: "<<endl;
         cin>>stake;
-        if(stake<0 || stake >user.getBalance())
+        if(stake<=0 || stake >user.getBalance())
         {
             cout<<"Invalid stake "<<endl;
             continue;
@@ -386,7 +416,7 @@ void App::ViewScores(User& user)
         cout<<"3. Ekstraklasa \n";
         cout<<"4. 1 Liga\n";
         cout<<"0. Back\n";
-        cin>>op;
+        op=readInt(0,4);
         string league;
         switch(op)
         {
@@ -403,6 +433,38 @@ void App::ViewScores(User& user)
                 break;
             case 4:
                 bets.resolveLeague("1liga");
+                break;
+            default:
+                cout<<"Invalid option "<<endl;
+                continue;
+        }
+    }while(op!=0);
+}
+void App::AccountManager(User &user)
+{
+    int op;
+      do {
+       
+        cout<<"BETPLANET #69 BEST BETTING SYSTEM"<<endl; 
+        cout<<"Account Manager "<<endl;
+        cout<<"1.Change password\n";
+        cout<<"2.Limits \n";
+        cout<<"3. Delete account\n";
+        cout<<"0. Back\n";
+        op=readInt(0,3);
+        string league;
+        switch(op)
+        {
+            case 0:
+                break;
+            case 1:
+                cout<<"Under construction"<<endl;
+                break;
+            case 2:
+                cout<<"Under construction"<<endl;
+                break;             
+            case 3:
+                cout<<"Under construction"<<endl;
                 break;
             default:
                 cout<<"Invalid option "<<endl;
