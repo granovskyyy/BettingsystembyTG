@@ -26,4 +26,5 @@ class App
     void ViewScores(User& user);
     void AccountManager(User& user);
     int readInt(int min,int max);
+    void ResponsibleGambling(User& user); 
 };

@@ -37,15 +37,6 @@ void UserManagment::registerBet(const string& username) //registering new bet in
     resetDailyLimit(username);
     db.incrementBets(username);
 }
-double UserManagment::getWithdrawalLimit(const string& username)
-{
-    return db.getDoubleValue("users","withdrawal_limit",username);
-
-}
-bool UserManagment::updateWithdrawalLimit(const string& username,double limit) //setting new withdrawal limit in database
-{
-    return db.updateDoubleValue("users","withdrawal_limit",limit);
-}
 bool UserManagment::isBlocked(const string& username)
 {
     return db.getIntValue("users", "blocked", username) == 1;

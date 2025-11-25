@@ -11,12 +11,12 @@ IMPORTANT:
 
 Project structures 
 - /teams - directory with txt files including teams from various football leagues
-app - whole app interface with all menus 
-database- integration with SQLite to store users data, bet history and matches queue 
-fixtures- all system of matchmaking, reading teams from files. 
-betsystem - system of betting, managing wins and losses
-auth- registering, logging into system and method of securing password (for Windows/UNIX)+ saving hashed password to database. 
-userprofile-simple clas to make new user 
-wallet- managing your digital wallet, withdrawals, deposits etc. 
-main() - where everything stays.
-usermanagmanent - system of managing users like withdrawals limits, bet limits etc (in work)
+-app - whole app interface with all menus 
+-database- integration with SQLite to store users data, bet history and matches queue 
+-fixtures- all system of matchmaking, reading teams from files. 
+-betsystem - system of betting, managing wins and losses
+-auth- registering, logging into system and method of securing password (for Windows/UNIX)+ saving hashed password to database. 
+-userprofile-simple clas to make new user 
+-wallet- managing your digital wallet, withdrawals, deposits etc. 
+-main() - where everything stays.
+-usermanagmanent - system of managing users like withdrawals limits, bet limits etc (in work)

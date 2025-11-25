@@ -153,8 +153,9 @@ void App::WalletMenu(User& user)
         cout<<"1. Account balance\n";
         cout<<"2. Insert money\n";
         cout<<"3. Withdraw money\n";
+        cout<<"4. Withdrawal limits\n";
         cout<<"0. Exit\n";
-        op=readInt(0,3);
+        op=readInt(0,4);
         string pwd;
         switch(op)
         {
@@ -174,6 +175,9 @@ void App::WalletMenu(User& user)
                 break;
             case 3:
                 wallet.WithdrawMoney(user);
+                break;
+            case 4:
+                wallet.setWithdrawalLimit(user);
                 break;
             default:
                 cout<<"Invalid option "<<endl;
@@ -377,7 +381,7 @@ void App::PlaceBet(User & user)
         }
         index--;
         string yourbet;
-        cout<<"Choose bet type (1/X/2)";
+        cout<<"Choose bet type (1/X/2)"<<endl;
         cin>>yourbet;
         if(yourbet!="1" && yourbet!="X" && yourbet!="2")
         {
@@ -452,6 +456,39 @@ void App::AccountManager(User &user)
         cout<<"3. Delete account\n";
         cout<<"0. Back\n";
         op=readInt(0,3);
+        string league;
+        switch(op)
+        {
+            case 0:
+                break;
+            case 1:
+                cout<<"Under construction"<<endl;
+                break;
+            case 2:
+                cout<<"Under construction"<<endl;
+                break;             
+            case 3:
+                cout<<"Under construction"<<endl;
+                break;
+            default:
+                cout<<"Invalid option "<<endl;
+                continue;
+        }
+    }while(op!=0);
+}
+void App::ResponsibleGambling(User& user)
+{
+    int op;
+      do {
+       
+        cout<<"BETPLANET #69 BEST BETTING SYSTEM"<<endl; 
+        cout<<"Limits"<<endl;
+        cout<<"1.Bets per day limit\n";
+        cout<<"2.Stake limit\n";
+        cout<<"3.Teporary account block (24h/7d/30d)\n";
+        cout<<"4.View actual limits\n";
+        cout<<"0.Back\n";
+        op=readInt(0,4);
         string league;
         switch(op)
         {

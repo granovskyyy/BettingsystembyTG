@@ -34,4 +34,7 @@ class Database{
     bool updateStringValue(const string& username, const string& column, const string& value);
     //increment bet counter
     bool incrementBets(const string& username);
+    //update withdrawal limit
+    bool updateWithdrawalLimit(const string& username, double limit);
+    double getWithdrawalLimit(const string& username);
 };  

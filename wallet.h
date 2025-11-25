@@ -11,4 +11,5 @@ class Wallet
     void viewAccountBalance(User & user);
     void TransferMoney(User & user);
     void WithdrawMoney(User & user);
+    void setWithdrawalLimit(User& user);
 };

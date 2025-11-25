@@ -5,13 +5,14 @@ class UserManagment{
     Database& db;
     public:
     UserManagment(Database& database);
-    bool canPlaceBet(const string& username);
+    bool canPlaceBet(const string& username); //limts
     void registerBet(const string& username);
-    double getWithdrawalLimit(const string& username);
-    bool updateWithdrawalLimit(const string& username, double newLimit);
-    void resetDailyLimit(const string& username);
-    bool isBlocked(const string& username);
+
+    void resetDailyLimit(const string& username);//reset limits
+    bool isBlocked(const string& username);//account bloking
     bool blockUser(const string& username);
     bool unblockUser(const string& username);
+    bool selfExclude(const string& username, int days); //hiding account
+    bool isSelfExcluded(const string& username);
 
 };

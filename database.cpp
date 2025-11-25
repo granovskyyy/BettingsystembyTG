@@ -18,7 +18,7 @@ Database::Database(const string& filename)
         "daily_bet_limit INTEGER DEFAULT 5,"
         "daily_bet_count INTEGER DEFAULT 0,"
         "last_bet_day TEXT,"
-        "withdrawal_limit REAL DEFAULT 100,"
+        "withdrawal_limit REAL DEFAULT 1000,"
         "blocked INTEGER DEFAULT 0"
         ");";
  
@@ -392,6 +392,34 @@ bool Database::incrementBets(const string& username)
     bool ok=sqlite3_step(stmt)==SQLITE_DONE;
     sqlite3_finalize(stmt);
     return ok;
+}
+bool Database::updateWithdrawalLimit(const string& username, double limit)
+{
+    const char* sql="UPDATE users SET withdrawal_limit = ? WHERE username =?;";
+    sqlite3_stmt* stmt;
+    sqlite3_prepare_v2(db,sql,-1,&stmt,nullptr);
+    sqlite3_bind_double(stmt,1,limit);
+    sqlite3_bind_text(stmt,2,username.c_str(),-1,SQLITE_TRANSIENT);
+
+    bool ok=(sqlite3_step(stmt)==SQLITE_DONE);
+    sqlite3_finalize(stmt);
+    return ok;
+}
+double Database::getWithdrawalLimit(const string& username)
+{
+    const char* sql="SELECT withdrawal_limit FROM users WHERE username = ?;";
+    sqlite3_stmt* stmt;
+    sqlite3_prepare_v2(db,sql,-1,&stmt,nullptr);
+    sqlite3_bind_text(stmt,1,username.c_str(),-1,SQLITE_TRANSIENT);
+
+    double limit= -1;
+    if(sqlite3_step(stmt)==SQLITE_ROW)
+    {
+        limit=sqlite3_column_double(stmt,0);
+
+    }
+    sqlite3_finalize(stmt);
+    return limit;
 }
 
 
