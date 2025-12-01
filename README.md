@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # BETTING SYSTEM
 
 A terminal-based sports betting application written in **C++** with **SQLite** support.
