@@ -27,4 +27,8 @@ class App
     void AccountManager(User& user);
     int readInt(int min,int max);
     void ResponsibleGambling(User& user); 
+    void BetsPerGameLimitMenu(User& user);
+    void StakeLimitMenu(User& user);
+    void AccountLockMenu(User& user);
+    void ViewActualLimits(User& user);
 };

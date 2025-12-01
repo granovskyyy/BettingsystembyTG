@@ -465,7 +465,7 @@ void App::AccountManager(User &user)
                 cout<<"Under construction"<<endl;
                 break;
             case 2:
-                cout<<"Under construction"<<endl;
+                ResponsibleGambling(user);
                 break;             
             case 3:
                 cout<<"Under construction"<<endl;
@@ -495,7 +495,7 @@ void App::ResponsibleGambling(User& user)
             case 0:
                 break;
             case 1:
-                cout<<"Under construction"<<endl;
+                BetsPerGameLimitMenu(user);
                 break;
             case 2:
                 cout<<"Under construction"<<endl;
@@ -503,9 +503,44 @@ void App::ResponsibleGambling(User& user)
             case 3:
                 cout<<"Under construction"<<endl;
                 break;
+            case 4:
+                ViewActualLimits(user);
+                break;
             default:
                 cout<<"Invalid option "<<endl;
                 continue;
         }
     }while(op!=0);
 }
+
+void App::BetsPerGameLimitMenu(User& user)
+{
+    int newLimit;
+
+    cout << "Enter new daily bet limit: ";
+    newLimit = readInt(1, 100); //range to 100 bets daily
+
+    db.updateIntValue(user.getUsername(), "daily_bet_limit", newLimit);
+
+    cout << "Daily bet limit updated to: " << newLimit << "\n\n";
+}
+
+void App::ViewActualLimits(User& user)
+{
+    cout << "=== ACTIVE LIMITS ===\n";
+
+    int dailyLimit = db.getIntValue("users","daily_bet_limit", user.getUsername());
+    double stakeLimit = db.getDoubleValue("users", "max_stake_limit", user.getUsername());
+    string blockedUntil = db.getStringValue("users", "blocked_until", user.getUsername());
+
+    cout << "Daily bet limit: " << dailyLimit << "\n";
+    cout << "Max stake per bet: " << stakeLimit << "\n";
+
+    if(blockedUntil.empty())
+        cout << "Account status: Active\n";
+    else
+        cout << "Account locked until: " << blockedUntil << "\n";
+
+    cout << "\n";
+}
+

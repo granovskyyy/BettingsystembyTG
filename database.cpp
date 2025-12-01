@@ -300,7 +300,7 @@ vector <MatchEvent> Database::getMatchesID(const string& league)
 }
 int Database::getIntValue(const string& table, const string& column, const string& username)
 {
-    string sql="SELECT"+column+" FROM "+table+" WHERE username =?";
+    string sql="SELECT "+column+" FROM "+table+" WHERE username = ?";
     sqlite3_stmt* stmt;
 
     sqlite3_prepare_v2(db,sql.c_str(),-1,&stmt,nullptr);
@@ -316,7 +316,7 @@ int Database::getIntValue(const string& table, const string& column, const strin
 }
 double Database::getDoubleValue(const string& table, const string& column, const string& username)
 {
-    string sql="SELECT"+column+" FROM "+table+" WHERE username =?";
+    string sql="SELECT "+column+" FROM "+table+" WHERE username = ?";
     sqlite3_stmt* stmt;
 
     sqlite3_prepare_v2(db,sql.c_str(),-1,&stmt,nullptr);
