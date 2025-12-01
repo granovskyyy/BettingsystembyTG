@@ -1,22 +1,128 @@
-BETTING SYSTEM 
-An CPP in-terminal app made to bet sports events 
-Technologies used 
-- C++
-- SQLite
-- Makefile
-IMPORTANT: 
-- INCLUDE YOUR FILEPATHS 
-- To use SQLite3 use files sqlite3.c and sqlite3.h (they are included in repo)
-- To compile files use gcc -c sqlite3.c -o sqlite3.o and then g++ *.cpp sqlite3.c -lws2_32 -o out.exe
+# BETTING SYSTEM
 
-Project structures 
-- /teams - directory with txt files including teams from various football leagues
--app - whole app interface with all menus 
--database- integration with SQLite to store users data, bet history and matches queue 
--fixtures- all system of matchmaking, reading teams from files. 
--betsystem - system of betting, managing wins and losses
--auth- registering, logging into system and method of securing password (for Windows/UNIX)+ saving hashed password to database. 
--userprofile-simple clas to make new user 
--wallet- managing your digital wallet, withdrawals, deposits etc. 
--main() - where everything stays.
--usermanagmanent - system of managing users like withdrawals limits, bet limits etc (in work)
+A terminal-based sports betting application written in **C++** with **SQLite** support.
+Designed to run locally on Windows or UNIX systems.
+
+---
+
+## TECHNOLOGIES USED
+
+* **C++**
+* **SQLite** (included: `sqlite3.c` & `sqlite3.h`)
+* **Makefile** (optional)
+
+---
+
+## PROJECT BUILD
+
+```
+/teams/            # .txt files with team lists from various football leagues
+/app/              # application interface — menus and UI logic
+/database/         # SQLite integration: users, bet history, match queue
+/fixtures/         # match creation system, reading team lists
+/betsystem/        # betting logic: calculating wins/losses
+/auth/             # registration & login, password hashing (Windows/UNIX)
+/userprofile/      # simple user class
+/wallet/           # wallet operations: deposit, withdrawal, balance
+/usermanagement/   # user limits, withdrawal limits, bet limits, temp locks
+main.cpp           # program entry point
+sqlite3.c
+sqlite3.h
+Makefile
+README.md
+```
+
+> **IMPORTANT:**
+> In several places in the code, you must insert your **file paths** (e.g., teams folder, database directory).
+> These locations are clearly marked with comments like *“CHANGE FILEPATH HERE”*.
+> Ensure the database directory exists before running the app.
+> If compilation fails on Windows due to networking libs, keep `-lws2_32` enabled.
+> On UNIX systems, remove `-lws2_32` entirely.
+
+---
+
+## COMPILATION 
+
+### 1) **Compile SQLite first**
+
+```bash
+gcc -c sqlite3.c -o sqlite3.o
+```
+
+### 2) **Compile and link the project**
+
+#### Windows:
+
+```bash
+g++ *.cpp sqlite3.c -lws2_32 -o out.exe
+```
+
+#### UNIX / Linux / macOS:
+
+```bash
+g++ *.cpp sqlite3.c -o out
+```
+
+If you prefer linking with the object file:
+
+```bash
+g++ *.cpp sqlite3.o -o out
+```
+
+### 3) MAKEFILE (in build)
+
+If a Makefile is provided:
+
+```bash
+make
+```
+
+---
+
+## ▶️ Running the Application
+
+```bash
+# Windows:
+./out.exe
+
+# UNIX / Linux / macOS:
+./out
+```
+
+The program runs entirely inside the terminal.
+Use the on-screen menu to navigate through the system.
+
+
+## Database (SQLite)
+
+The application stores:
+
+* user accounts (with hashed passwords),
+* bet history,
+* scheduled matches.
+
+**No external SQLite installation is required** — everything is bundled with the project (`sqlite3.c`, `sqlite3.h`).
+
+Make sure the directory where the `.db` file is stored has **read/write permissions**.
+
+
+## SECURITY
+
+Located in `/auth/`:
+
+* registration and login system
+* platform-specific hashing for Windows and UNIX
+* hashed password storage in SQLite
+
+## FILEPATHS
+
+In code, you will find comments like:
+
+```cpp
+// TODO: Set path to teams directory
+std::string TEAMS_PATH = "...";
+```
+
+Update these paths to match your local project layout.
+
+
