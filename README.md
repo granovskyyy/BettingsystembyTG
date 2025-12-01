@@ -1,16 +1,16 @@
 BETTING SYSTEM 
-An CPP in-terminal app made to bet sports events 
+A CPP in-terminal app made to bet sports events 
 Technologies used 
 - C++
 - SQLite
 - Makefile
 IMPORTANT: 
-- INCLUDE YOUR FILEPATHS 
+- INCLUDE YOUR FILEPATHS (it is marked in code where to change it)
 - To use SQLite3 use files sqlite3.c and sqlite3.h (they are included in repo)
 - To compile files use gcc -c sqlite3.c -o sqlite3.o and then g++ *.cpp sqlite3.c -lws2_32 -o out.exe
 
 Project structures 
-- /teams - directory with txt files including teams from various football leagues
+-/teams - directory with txt files including teams from various football leagues
 -app - whole app interface with all menus 
 -database- integration with SQLite to store users data, bet history and matches queue 
 -fixtures- all system of matchmaking, reading teams from files. 
