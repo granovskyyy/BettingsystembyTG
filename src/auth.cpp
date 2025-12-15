@@ -102,7 +102,7 @@ void Authenication::RegisterUser() //registering new user
     unsigned int securePWD=hashPWD(password);
     User user1(login,to_string(securePWD),balance);
     db.addUser(login,to_string(securePWD),balance);
-    cout<<"Welcome on BetPlanet!"<<endl;
+    cout<<"Registered succesfully"<<endl;
 
   
 }
@@ -128,6 +128,11 @@ User Authenication::LoginSystem() //logging to system
             cout<<"Password"<<endl;
             password=HiddenPWD();
             unsigned int securedPWD=hashPWD(password);
+            if(password.empty())   //cancel login 
+            {
+                cout<<"Login cancelled"<<endl;
+                return User("","",0);
+            }
             if(to_string(securedPWD)==storedpwd)
             {
                 cout<<"Login successfully"<<endl;

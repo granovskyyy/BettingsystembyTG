@@ -5,7 +5,7 @@ using namespace std;
 
 App::App(Database& database): db(database), wallet(database),bets(database),userManagment(database){};
 vector <User> users;
-Database db("C:/Users/rt04/Documents/BettingsystembyTG/users.db");
+Database db("data/users.db");
 Authenication auth(users,db);
 Wallet wallet(db);
 BetSystem bets(db);
@@ -67,8 +67,8 @@ void App:: UserMenu(User & user)
     do 
     {
         
-        cout<<"BETPLANET #69 BEST BETTING SYSTEM"<<endl; 
-        cout<<"Welcome user "<<user.getUsername()<<endl;
+        cout<<"WELCOME TO BETTING APP "<<endl; 
+        cout<<"User "<<user.getUsername()<<endl;
         cout<<"1. Coupons\n";
         cout<<"2. Wallet \n";
         cout<<"3. Events today\n";
@@ -103,7 +103,7 @@ void App:: UserMenu(User & user)
 int App::MainMenu()
 {
     int op;   
-    cout<<"BETPLANET #69 BEST BETTING SYSTEM"<<endl; 
+    cout<<"BETTING APP "<<endl; 
     cout<<"1. Register \n";
     cout<<"2. Login\n";
     cout<<"0. Exit\n";
@@ -118,7 +118,7 @@ void App::CouponMenu(User& user)
     do 
     {
           
-        cout<<"BETPLANET #69 BEST BETTING SYSTEM"<<endl; 
+        cout<<"COUPON MENU"<<endl; 
         cout<<"1. Place coupon\n";
         cout<<"2. Your coupons\n";
         cout<<"3. Coupons history\n";
@@ -150,7 +150,7 @@ void App::WalletMenu(User& user)
     do 
     {
           
-        cout<<"BETPLANET #69 BEST BETTING SYSTEM"<<endl; 
+        cout<<"WALLET MENU "<<endl; 
         cout<<"1. Account balance\n";
         cout<<"2. Insert money\n";
         cout<<"3. Withdraw money\n";
@@ -198,7 +198,7 @@ void App::EventMenu(User& user)
     int op;
       do {
        
-        cout<<"BETPLANET #69 BEST BETTING SYSTEM"<<endl; 
+        cout<<"EVENT MENU "<<endl; 
         cout<<"1. LaLiga\n";
         cout<<"2. Premier League\n";
         cout<<"3. Bundesliga\n";
@@ -217,27 +217,27 @@ void App::EventMenu(User& user)
                 break;
             case 1:
                 league="LaLiga";
-                filepath="C:\\Users\\rt04\\Documents\\BettingsystembyTG\\teams\\laliga.txt"; //YOUR FILEPATH HERE
+                filepath="data/teams/laliga.txt"; //YOUR FILEPATH HERE
                 break;
             case 2:
                 league="PremierLeague";
-                filepath="C:\\Users\\rt04\\Documents\\BettingsystembyTG\\teams\\premierleague.txt"; //YOUR FILEPATH HERE
+                filepath="data/teams/premierleague.txt"; //YOUR FILEPATH HERE
                 break;     
             case 3:
                 league="Bundesliga";
-                filepath="C:\\Users\\rt04\\Documents\\BettingsystembyTG\\teams\\bundesliga.txt"; //YOUR FILEPATH HERE
+                filepath="data/teams/bundesliga.txt"; //YOUR FILEPATH HERE
                 break;  
             case 4:
                 league="SerieA";
-                filepath="C:\\Users\\rt04\\Documents\\BettingsystembyTG\\teams\\seriea.txt"; //YOUR FILEPATH HERE
+                filepath="data/teams/seriea.txt"; //YOUR FILEPATH HERE
                 break;      
             case 5:
                 league="Ekstraklasa";
-                filepath="C:\\Users\\rt04\\Documents\\BettingsystembyTG\\teams\\eklapa.txt"; //YOUR FILEPATH HERE
+                filepath="data/teams/eklapa.txt"; //YOUR FILEPATH HERE
                 break;
             case 6:
                 league="1liga";
-                filepath="C:\\Users\\rt04\\Documents\\BettingsystembyTG\\teams\\1liga.txt"; //YOUR FILEPATH HERE
+                filepath="data/teams/1liga.txt"; //YOUR FILEPATH HERE
                 break;
             case 7:
                 if(leagues.empty())
@@ -336,8 +336,6 @@ void App::PlaceBet(User & user)
     
     int op;
       do {
-       
-        cout<<"BETPLANET #69 BEST BETTING SYSTEM"<<endl; 
         if(db.getIntValue("users","daily_bet_limit",user.getUsername()) <= db.getIntValue("users","daily_bet_count",user.getUsername()) || userManagment.isBlocked(user.getUsername()))
         {
             cout<<"Your account is temporarily blocked. Cannot place bets"<<endl;
@@ -438,9 +436,7 @@ void App::AccountManager(User &user)
 {
     int op;
       do {
-       
-        cout<<"BETPLANET #69 BEST BETTING SYSTEM"<<endl; 
-        cout<<"Account Manager "<<endl;
+        cout<<"ACCOUNT MANAGEMENT"<<endl;
         cout<<"1.Change password\n";
         cout<<"2.Limits \n";
         cout<<"0. Back\n";
@@ -467,8 +463,7 @@ void App::ResponsibleGambling(User& user)
     int op;
       do {
        
-        cout<<"BETPLANET #69 BEST BETTING SYSTEM"<<endl; 
-        cout<<"Limits"<<endl;
+        cout<<"LIMITS"<<endl;
         cout<<"1.Bets per day limit\n";
         cout<<"2.Stake limit\n";
         cout<<"3.Teporary account block (24h/7d/30d)\n";
@@ -502,7 +497,7 @@ void App::ResponsibleGambling(User& user)
 void App::BetsPerGameLimitMenu(User& user)
 {
     int newLimit;
-
+    cout<<"SET DAILY BET LIMIT"<<endl;
     cout << "Enter new daily bet limit: ";
     newLimit = readInt(1, 100); //range to 100 bets daily
 
@@ -513,7 +508,7 @@ void App::BetsPerGameLimitMenu(User& user)
 
 void App::ViewActualLimits(User& user)
 {
-    cout << "=== ACTIVE LIMITS ===\n";
+    cout << "ACTIVE LIMITS \n";
 
     int dailyLimit = db.getIntValue("users","daily_bet_limit", user.getUsername());
     double stakeLimit = db.getDoubleValue("users", "max_stake_limit", user.getUsername());

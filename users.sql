@@ -1,7 +1,0 @@
-CREATE TABLE if NOT EXISTS users(
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    username TEXT UNIQUE NOT NULL,
-    pwd TEXT NOT NULL,
-    balance REAL DEFAULT 0
-
-);

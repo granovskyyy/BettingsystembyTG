@@ -7,7 +7,7 @@ using namespace std;
 int main()
 {
 
-    Database db("C:\\Users\\rt04\\Documents\\BettingsystembyTG\\users.db");
+    Database db("data/users.db");
     App app(db);
     app.Run();
 
