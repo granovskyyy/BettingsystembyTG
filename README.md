@@ -13,7 +13,7 @@ Designed to run locally on Windows or UNIX systems.
 
 ---
 
-## PROJECT BUILD
+## PROJECT CLASSES 
 
 ```
 /teams/            # .txt files with team lists from various football leagues
@@ -26,16 +26,19 @@ Designed to run locally on Windows or UNIX systems.
 /wallet/           # wallet operations: deposit, withdrawal, balance
 /usermanagement/   # user limits, withdrawal limits, bet limits, temp locks
 main.cpp           # program entry point
-sqlite3.c
+sqlite3.c          #sqlite files 
 sqlite3.h
 Makefile
 README.md
 ```
+#PROJECT STRUCTURE 
+```
+/src - .cpp files
+/include - .h files
+/data - database and teams .txtfiles 
+
 
 > **IMPORTANT:**
-> In several places in the code, you must insert your **file paths** (e.g., teams folder, database directory).
-> These locations are clearly marked with comments like *“CHANGE FILEPATH HERE”*.
-> Ensure the database directory exists before running the app.
 > If compilation fails on Windows due to networking libs, keep `-lws2_32` enabled.
 > On UNIX systems, remove `-lws2_32` entirely.
 
@@ -54,13 +57,13 @@ gcc -c sqlite3.c -o sqlite3.o
 #### Windows:
 
 ```bash
-g++ *.cpp sqlite3.o -lws2_32 -o out.exe
+g++ src/*.cpp sqlite3.o -Iinclude -lws2_32 -o out.exe
 ```
 
 #### UNIX / Linux / macOS:
 
 ```bash
-g++ *.cpp sqlite3.c -o out
+g++ src/*.cpp sqlite3.o -Iinclude -o out
 ```
 
 If you prefer linking with the object file:
@@ -114,15 +117,6 @@ Located in `/auth/`:
 * platform-specific hashing for Windows and UNIX
 * hashed password storage in SQLite
 
-## FILEPATHS
 
-In code, you will find comments like:
-
-```cpp
-// TODO: Set path to teams directory
-std::string TEAMS_PATH = "...";
-```
-
-Update these paths to match your local project layout.
 
 
