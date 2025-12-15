@@ -17,22 +17,19 @@ class App
     public:
     App(Database& database);
     void Run(); //staring app 
-    void UserMenu(User & user);
-    int MainMenu();
-    void CouponMenu(User & user);
-    void WalletMenu(User & user);
-    void EventMenu(User & user);
-    void ShowActiveBets(User& user);
-    void ShowBetHistory(User& user);
-    void PlaceBet(User& user);
-    void AccountManager(User& user);
-    int readInt(int min,int max);
-    void ResponsibleGambling(User& user); 
-    //limits menus 
-    void BetsPerGameLimitMenu(User& user); 
-    void StakeLimitMenu(User& user);
-    void AccountLockMenu(User& user);
-    void ViewActualLimits(User& user);
-    //changing password
-    void ChangePasswordMenu(User& user);
+    void UserMenu(User & user); //menu after login
+    int MainMenu(); //start menu
+    void CouponMenu(User & user); //coupon menu
+    void WalletMenu(User & user); //wallet menu
+    void EventMenu(User & user); //event menu
+    void ShowActiveBets(User& user); //showing active bets
+    void ShowBetHistory(User& user); //showing bet history
+    void PlaceBet(User& user); //placing new bet
+    void AccountManager(User& user); //managing account
+    int readInt(int min,int max); //input validation
+    void ResponsibleGambling(User& user);  //functions for limiting account
+    void BetsPerGameLimitMenu(User& user); //limiting bets per day
+    void StakeLimitMenu(User& user); //limiting stake per bet
+    void AccountLockMenu(User& user); //temporary account lock
+    void ViewActualLimits(User& user); //viewing actual limits
 };

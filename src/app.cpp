@@ -163,7 +163,7 @@ void App::WalletMenu(User& user)
             case 0:
                 break;
             case 1:
-                
+                cout<<"ACCOUNT BALANCE"<<endl;
                 double balance;
                 if(db.getUser(user.getUsername(),pwd,balance))
                 {
@@ -172,12 +172,15 @@ void App::WalletMenu(User& user)
                 wallet.viewAccountBalance(user);
                 break;
             case 2:
+                cout<<"INSERT MONEY"<<endl;
                 wallet.TransferMoney(user);
                 break;
             case 3:
+                cout<<"WITHDRAW MONEY"<<endl;
                 wallet.WithdrawMoney(user);
                 break;
             case 4:
+                cout<<"WITHDRAWAL LIMITS"<<endl;
                 wallet.setWithdrawalLimit(user);
                 break;
             default:
@@ -466,7 +469,7 @@ void App::ResponsibleGambling(User& user)
         cout<<"LIMITS"<<endl;
         cout<<"1.Bets per day limit\n";
         cout<<"2.Stake limit\n";
-        cout<<"3.Teporary account block (24h/7d/30d)\n";
+        cout<<"3.Temporary account block (24h/7d/30d)\n";
         cout<<"4.View actual limits\n";
         cout<<"0.Back\n";
         op=readInt(0,4);
@@ -500,9 +503,7 @@ void App::BetsPerGameLimitMenu(User& user)
     cout<<"SET DAILY BET LIMIT"<<endl;
     cout << "Enter new daily bet limit: ";
     newLimit = readInt(1, 100); //range to 100 bets daily
-
     db.updateIntValue(user.getUsername(), "daily_bet_limit", newLimit);
-
     cout << "Daily bet limit updated to: " << newLimit << "\n\n";
 }
 
