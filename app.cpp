@@ -3,7 +3,12 @@
 #include <iostream>
 using namespace std;
 
-App::App(Database& database): db(database), wallet(database),bets(database) {};
+App::App(Database& database): db(database), wallet(database),bets(database),userManagment(database){};
+vector <User> users;
+Database db("C:/Users/rt04/Documents/BettingsystembyTG/users.db");
+Authenication auth(users,db);
+Wallet wallet(db);
+BetSystem bets(db);
 int App::readInt(int min, int max)  //function to prevent unexcepted inputs
 {
     int val;
@@ -26,11 +31,7 @@ int App::readInt(int min, int max)  //function to prevent unexcepted inputs
 }
 void App::Run()
 {
-    vector <User> users;
-    Database db("C:/Users/rt04/Documents/BettingsystembyTG/users.db");
-    Authenication auth(users,db);
-    Wallet wallet(db);
-    BetSystem bets(db);
+
  
     int op;
     do
@@ -192,7 +193,7 @@ void App::EventMenu(User& user)
 {
     vector <string> teams;
     vector <MatchEvent> fixtures; 
-    vector <string> leagues={"LaLiga", "PremierLeague","Ekstraklasa","1liga"};
+    vector <string> leagues={"LaLiga", "PremierLeague","Ekstraklasa","1liga","Bundesliga","SerieA"};
     Fixtures fx;
     int op;
       do {
@@ -200,11 +201,13 @@ void App::EventMenu(User& user)
         cout<<"BETPLANET #69 BEST BETTING SYSTEM"<<endl; 
         cout<<"1. LaLiga\n";
         cout<<"2. Premier League\n";
-        cout<<"3. Ekstraklasa \n";
-        cout<<"4. 1 Liga\n";
-        cout<<"5. Results\n";
+        cout<<"3. Bundesliga\n";
+        cout<<"4. Serie A\n";
+        cout<<"5. Ekstraklasa \n";
+        cout<<"6. 1 Liga\n";
+        cout<<"7. Results\n";
         cout<<"0. Exit\n";
-        op=readInt(0,5);
+        op=readInt(0,7);
         string league;
         string filepath;
         
@@ -219,17 +222,24 @@ void App::EventMenu(User& user)
             case 2:
                 league="PremierLeague";
                 filepath="C:\\Users\\rt04\\Documents\\BettingsystembyTG\\teams\\premierleague.txt"; //YOUR FILEPATH HERE
-                    break;             
+                break;     
             case 3:
-                league="Ekstraklasa";
-
-                filepath="C:\\Users\\rt04\\Documents\\BettingsystembyTG\\teams\\eklapa.txt"; //YOUR FILEPATH HERE
-                    break;
+                league="Bundesliga";
+                filepath="C:\\Users\\rt04\\Documents\\BettingsystembyTG\\teams\\bundesliga.txt"; //YOUR FILEPATH HERE
+                break;  
             case 4:
+                league="SerieA";
+                filepath="C:\\Users\\rt04\\Documents\\BettingsystembyTG\\teams\\seriea.txt"; //YOUR FILEPATH HERE
+                break;      
+            case 5:
+                league="Ekstraklasa";
+                filepath="C:\\Users\\rt04\\Documents\\BettingsystembyTG\\teams\\eklapa.txt"; //YOUR FILEPATH HERE
+                break;
+            case 6:
                 league="1liga";
                 filepath="C:\\Users\\rt04\\Documents\\BettingsystembyTG\\teams\\1liga.txt"; //YOUR FILEPATH HERE
                 break;
-            case 5:
+            case 7:
                 if(leagues.empty())
                 {
                     cout<<"Wait for final results"<<endl;
@@ -238,6 +248,7 @@ void App::EventMenu(User& user)
                 for(auto& l:leagues)
                 {
                     bets.resolveLeague(l);
+                    userManagment.processTimeStep();
                 }
                 continue;
             default:
@@ -327,13 +338,20 @@ void App::PlaceBet(User & user)
       do {
        
         cout<<"BETPLANET #69 BEST BETTING SYSTEM"<<endl; 
+        if(db.getIntValue("users","daily_bet_limit",user.getUsername()) <= db.getIntValue("users","daily_bet_count",user.getUsername()) || userManagment.isBlocked(user.getUsername()))
+        {
+            cout<<"Your account is temporarily blocked. Cannot place bets"<<endl;
+            return;
+        }
         cout<<"PLACE A BET"<<endl;
         cout<<"1. LaLiga\n";
         cout<<"2. Premier League\n";
-        cout<<"3. Ekstraklasa \n";
-        cout<<"4. 1 Liga\n";
+        cout<<"3. Bundesliga\n";
+        cout<<"4. Serie A\n";
+        cout<<"5. Ekstraklasa \n";
+        cout<<"6. 1 Liga\n";
         cout<<"0. Back\n";
-        op=readInt(0,4);
+        op=readInt(0,6);
         string league;
         switch(op)
         {
@@ -344,11 +362,17 @@ void App::PlaceBet(User & user)
                 break;
             case 2:
                 league="PremierLeague";
-                break;             
+                break;
             case 3:
-                league="Ekstraklasa";
+                league="Bundesliga";
                 break;
             case 4:
+                league="SerieA";
+                break;             
+            case 5:
+                league="Ekstraklasa";
+                break;
+            case 6:
                 league="1liga";
                 break;
             default:
@@ -391,7 +415,7 @@ void App::PlaceBet(User & user)
         double stake;
         cout<<"Stake amount: "<<endl;
         cin>>stake;
-        if(stake<=0 || stake >user.getBalance())
+        if(stake<=0 || stake >user.getBalance() || stake > db.getDoubleValue("users","max_stake_limit",user.getUsername())) //checking is stake valid 
         {
             cout<<"Invalid stake "<<endl;
             continue;
@@ -401,46 +425,12 @@ void App::PlaceBet(User & user)
             user.SetBalance(user.getBalance()-stake);
             db.updateBalance(user.getUsername(),user.getBalance());
             cout<<"Bet placed successfully"<<endl;
+            db.incrementBets(user.getUsername());
+            
         }
         else
         {
             cout<<"Could not place a bet"<<endl;
-        }
-    }while(op!=0);
-}
-void App::ViewScores(User& user)
-{
-     int op;
-      do {
-       
-        cout<<"BETPLANET #69 BEST BETTING SYSTEM"<<endl; 
-        cout<<"SCORES "<<endl;
-        cout<<"1. LaLiga\n";
-        cout<<"2. Premier League\n";
-        cout<<"3. Ekstraklasa \n";
-        cout<<"4. 1 Liga\n";
-        cout<<"0. Back\n";
-        op=readInt(0,4);
-        string league;
-        switch(op)
-        {
-            case 0:
-                break;
-            case 1:
-                bets.resolveLeague("LaLiga");
-                break;
-            case 2:
-                bets.resolveLeague("PremierLeague");
-                break;             
-            case 3:
-                bets.resolveLeague("Ekstraklasa");
-                break;
-            case 4:
-                bets.resolveLeague("1liga");
-                break;
-            default:
-                cout<<"Invalid option "<<endl;
-                continue;
         }
     }while(op!=0);
 }
@@ -453,23 +443,19 @@ void App::AccountManager(User &user)
         cout<<"Account Manager "<<endl;
         cout<<"1.Change password\n";
         cout<<"2.Limits \n";
-        cout<<"3. Delete account\n";
         cout<<"0. Back\n";
-        op=readInt(0,3);
+        op=readInt(0,2);
         string league;
         switch(op)
         {
             case 0:
                 break;
             case 1:
-                cout<<"Under construction"<<endl;
+                auth.ChangePassword(db,user);
                 break;
             case 2:
                 ResponsibleGambling(user);
                 break;             
-            case 3:
-                cout<<"Under construction"<<endl;
-                break;
             default:
                 cout<<"Invalid option "<<endl;
                 continue;
@@ -498,10 +484,10 @@ void App::ResponsibleGambling(User& user)
                 BetsPerGameLimitMenu(user);
                 break;
             case 2:
-                cout<<"Under construction"<<endl;
+                StakeLimitMenu(user);
                 break;             
             case 3:
-                cout<<"Under construction"<<endl;
+                AccountLockMenu(user);
                 break;
             case 4:
                 ViewActualLimits(user);
@@ -531,16 +517,70 @@ void App::ViewActualLimits(User& user)
 
     int dailyLimit = db.getIntValue("users","daily_bet_limit", user.getUsername());
     double stakeLimit = db.getDoubleValue("users", "max_stake_limit", user.getUsername());
-    string blockedUntil = db.getStringValue("users", "blocked_until", user.getUsername());
+    int blocked = db.getIntValue("users", "blocked", user.getUsername());
 
     cout << "Daily bet limit: " << dailyLimit << "\n";
     cout << "Max stake per bet: " << stakeLimit << "\n";
 
-    if(blockedUntil.empty())
+    if(blocked==0)
         cout << "Account status: Active\n";
     else
-        cout << "Account locked until: " << blockedUntil << "\n";
+        cout << "Account locked \n";
 
     cout << "\n";
 }
+void App::StakeLimitMenu(User& user)
+{
+    cout<<"STAKE LIMIT MENU"<<endl;
+    cout<<"Enter new stake limit amount: "<<endl;
+    double newLimit;
+    cin>>newLimit;
+    if(!cin || newLimit<=0)
+    {
+        cin.clear();
+        cin.ignore(10000,'\n');
+        cout<<"Invalid limit"<<endl;
+        return;
+    }
+    db.updateDoubleValue(user.getUsername(),"max_stake_limit",newLimit);
+    cout<<"Stake limit updated to: "<<newLimit<<endl;
+
+};
+void App::AccountLockMenu(User& user)
+{
+    
+    int op;
+      do {
+       
+        cout<<"ACCOUNT LOCK MENU"<<endl;
+        cout<<"1.Block 24h\n";
+        cout<<"2.Block 72h\n";
+        cout<<"3.Block 1 week\n";
+        cout<<"0.Back\n";
+        op=readInt(0,4);
+        string league;
+        switch(op)
+        {
+            case 0:
+                break;
+            case 1:
+                userManagment.blockUser(user.getUsername(), 1);
+                cout<<"Account blocked for 24h"<<endl;
+                break;
+            case 2:
+                userManagment.blockUser(user.getUsername(), 3);
+                cout<<"Account blocked for 72h"<<endl;
+                break;             
+            case 3:
+                userManagment.blockUser(user.getUsername(), 7);
+                cout<<"Account blocked for 1 week"<<endl;
+                break;
+            default:
+                cout<<"Invalid option "<<endl;
+                continue;
+        }
+    }while(op!=0);
+};
+
+
 

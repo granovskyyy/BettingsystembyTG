@@ -1,7 +1,8 @@
 #include "usermanagment.h"
 #include <iostream>
 #include <time.h>
-
+#include <unordered_map>
+unordered_map<string, time_t> tempBlocks;
 UserManagment::UserManagment(Database& database):db(database) {};
 void UserManagment::resetDailyLimit(const string& username)
 {
@@ -32,22 +33,24 @@ bool UserManagment::canPlaceBet(const string& username) //check if user can plac
     }
     return true;
 }
-void UserManagment::registerBet(const string& username) //registering new bet in database
-{
-    resetDailyLimit(username);
-    db.incrementBets(username);
-}
 bool UserManagment::isBlocked(const string& username)
 {
-    return db.getIntValue("users", "blocked", username) == 1;
+    return db.getIntValue("users","blocked",username)==1;
+}
+void UserManagment::blockUser(const string& username, int rounds)
+{
+    db.updateIntValue(username, "blocked", 1);
+    db.updateIntValue(username, "block_days", rounds);
+    db.updateIntValue(username, "locked_days", 0);
 }
 
-bool UserManagment::blockUser(const string& username)
-{
-    return db.updateIntValue(username, "blocked", 1);
-}
 
 bool UserManagment::unblockUser(const string& username)
 {
-    return db.updateIntValue(username, "blocked", 0);
+    return db.updateIntValue(username, "block_end_time", 0);
+}
+void UserManagment::processTimeStep()
+{
+    db.incrementLockedDays();
+    db.unlockUsers();
 }

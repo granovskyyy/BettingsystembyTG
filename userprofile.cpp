@@ -8,4 +8,5 @@ double User::getBalance() const {return balance;}
 string User::getPassword() const {return password;}
 string User::getUsername() const {return username;}
 void User::SetBalance(double b) { balance=b;}
+void User::setPassword(const string& newPwd) { password=newPwd; }
 

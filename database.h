@@ -37,4 +37,10 @@ class Database{
     //update withdrawal limit
     bool updateWithdrawalLimit(const string& username, double limit);
     double getWithdrawalLimit(const string& username);
-};  
+    //simulaton of user locking
+    bool incrementLockedDays();
+    bool unlockUsers();
+    //changing password 
+    string getPasswordHash(const string& username);
+    bool updatePassword(const string& username, const string& newHashedPwd);
+};   

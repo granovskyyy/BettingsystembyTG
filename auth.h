@@ -22,6 +22,7 @@ class Authenication
     void RegisterUser();
     string HiddenPWD(); //function for hiding password
     unsigned int hashPWD(const string& password);
-
-
+    bool ChangePassword(Database& db, User& user);
+    bool isPasswordValid(const string& password);
+    bool readValidPassword(string& password);
 };

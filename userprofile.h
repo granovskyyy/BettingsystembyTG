@@ -10,6 +10,7 @@ class User
     User(string u, string p, double b = 0.0); //creating new user 
     string getUsername() const;
     string getPassword() const; //getters for users data
+    void setPassword(const string& newPwd);
     double getBalance() const;
     void SetBalance(double b);
 };

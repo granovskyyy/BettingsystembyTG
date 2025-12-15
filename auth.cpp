@@ -94,41 +94,13 @@ void Authenication::RegisterUser() //registering new user
             break;
         }
     }while(takenLogin);
-      
-
-        bool ValidPWD=false;
-        while(!ValidPWD)
-        {
-            cout<<"Enter password "<<endl;
-            cout<<"Your password must be: \n"
-            "->at least 8 digit long \n"
-            "->at least one number "<<endl;
-            password=HiddenPWD();
-            if(password.length()<8)
-            {
-                cout<<"Password too short"<<endl;
-                continue;
-            }
-            bool hasDigit=false;
-            for(char c:password)
-            {
-                
-                if(isdigit(c))
-                {
-                hasDigit=true;
-                }
-            }
-            if(!hasDigit)
-            {
-                cout<<"Password must contain at least one number"<<endl;
-                continue;
-            }
-            ValidPWD=true;
-        };
-
-    User user1(login,password,balance);
-    users.push_back(user1); //adding new user to data base 
+    if(!readValidPassword(password))
+    {
+        cout<<"Registration cancelled"<<endl;
+        return;
+    }
     unsigned int securePWD=hashPWD(password);
+    User user1(login,to_string(securePWD),balance);
     db.addUser(login,to_string(securePWD),balance);
     cout<<"Welcome on BetPlanet!"<<endl;
 
@@ -159,7 +131,7 @@ User Authenication::LoginSystem() //logging to system
             if(to_string(securedPWD)==storedpwd)
             {
                 cout<<"Login successfully"<<endl;
-                return User(login,password,userbalance);
+                return User(login,storedpwd,userbalance);
             }
             else
             {
@@ -182,4 +154,69 @@ unsigned int Authenication::hashPWD(const string& password)
 
     }
     return result;
+}
+bool Authenication::isPasswordValid(const string& password)
+{
+    if (password.length() < 8) {
+        cout<<"Password must be at least 8 characters long.\n";
+        return false;
+    }
+    bool hasDigit = false;
+    for (char c : password) {
+        if (isdigit(c)) {
+            hasDigit = true;
+            break;
+        }
+    }
+    if (!hasDigit) {
+        cout<<"Password must contain at least one number.\n";
+        return false;
+    }
+    return true;
+}
+bool Authenication::readValidPassword(string& password)
+{
+    while (true) {
+        cout << "Enter password (empty=cancel): ";
+        password = HiddenPWD();
+        if(password.empty()) {
+            return false; // Cancelled
+        }
+        if (isPasswordValid(password)) {
+            return true;
+        } else {
+            cout <<"Invalid password"<< endl;
+        }
+    }
+}
+bool Authenication::ChangePassword(Database& db, User& user)
+{
+    cout << "Enter current password:\n";
+    string oldPwd = HiddenPWD();
+
+    // sprawdzenie starego hasła
+    if(to_string(hashPWD(oldPwd))!=user.getPassword())
+    {
+        cout << "Incorrect current password\n";
+        return false;
+    }
+
+    string newPwd;
+    if(!readValidPassword(newPwd))
+    {
+        cout << "Password change cancelled\n";
+        return false;
+    }
+
+    string hashed = to_string(hashPWD(newPwd));
+
+    if(!db.updatePassword(user.getUsername(), hashed))
+    {
+        cout << "Database error\n";
+        return false;
+    }
+
+    user.setPassword(hashed); 
+    cout << "Password changed successfully\n";
+    return true;
 }

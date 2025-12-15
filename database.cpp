@@ -17,9 +17,12 @@ Database::Database(const string& filename)
         "balance REAL DEFAULT 0,"
         "daily_bet_limit INTEGER DEFAULT 5,"
         "daily_bet_count INTEGER DEFAULT 0,"
+        "max_stake_limit REAL DEFAULT 1000,"
         "last_bet_day TEXT,"
         "withdrawal_limit REAL DEFAULT 1000,"
-        "blocked INTEGER DEFAULT 0"
+        "blocked INTEGER DEFAULT 0,"
+        "block_days INTEGER DEFAULT 0,"
+        "locked_days INTEGER DEFAULT 0"
         ");";
  
     sqlite3_exec(db,create_users,nullptr,nullptr,nullptr);
@@ -421,5 +424,46 @@ double Database::getWithdrawalLimit(const string& username)
     sqlite3_finalize(stmt);
     return limit;
 }
+bool Database::incrementLockedDays()
+{
+    const char* sql =
+        "UPDATE users SET locked_days = locked_days + 1 WHERE blocked = 1";
+    return sqlite3_exec(db, sql, nullptr, nullptr, nullptr) == SQLITE_OK;
+}
+bool Database::unlockUsers()
+{
+    const char* sql =
+        "UPDATE users SET blocked = 0, locked_days = 0, block_days = 0 "
+        "WHERE blocked = 1 AND locked_days >= block_days";
+    return sqlite3_exec(db, sql, nullptr, nullptr, nullptr) == SQLITE_OK;
+}
+string Database::getPasswordHash(const string& username)
+{
+    const char* sql="SELECT pwd FROM users WHERE username = ?;";
+    sqlite3_stmt* stmt;
+    sqlite3_prepare_v2(db,sql,-1,&stmt,nullptr);
+    sqlite3_bind_text(stmt,1,username.c_str(),-1,SQLITE_TRANSIENT);
+
+    string pwd;
+    if(sqlite3_step(stmt)==SQLITE_ROW)
+    {
+        pwd=(const char*)sqlite3_column_text(stmt,0);
+    }
+    sqlite3_finalize(stmt);
+    return pwd;
+}
+bool Database::updatePassword(const string& username, const string& newHashedPwd)
+{
+    const char* sql="UPDATE users SET pwd = ? WHERE username =?;";
+    sqlite3_stmt* stmt;
+    sqlite3_prepare_v2(db,sql,-1,&stmt,nullptr);
+    sqlite3_bind_text(stmt,1,newHashedPwd.c_str(),-1,SQLITE_TRANSIENT);
+    sqlite3_bind_text(stmt,2,username.c_str(),-1,SQLITE_TRANSIENT);
+
+    bool ok=(sqlite3_step(stmt)==SQLITE_DONE);
+    sqlite3_finalize(stmt);
+    return ok;
+}
+
 
 
