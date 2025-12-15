@@ -54,7 +54,7 @@ gcc -c sqlite3.c -o sqlite3.o
 #### Windows:
 
 ```bash
-g++ *.cpp sqlite3.c -lws2_32 -o out.exe
+g++ *.cpp sqlite3.o -lws2_32 -o out.exe
 ```
 
 #### UNIX / Linux / macOS:
