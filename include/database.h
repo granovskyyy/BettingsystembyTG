@@ -39,4 +39,5 @@ class Database{
     bool unlockUsers(); //unlocking users after lock period
     string getPasswordHash(const string& username);   //getting hashed password  
     bool updatePassword(const string& username, const string& newHashedPwd); //changing password 
+    bool resetDailyBets(); //resetting daily bets for all users
 };   

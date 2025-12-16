@@ -18,7 +18,6 @@ Database::Database(const string& filename)
         "daily_bet_limit INTEGER DEFAULT 5,"
         "daily_bet_count INTEGER DEFAULT 0,"
         "max_stake_limit REAL DEFAULT 1000,"
-        "last_bet_day TEXT,"
         "withdrawal_limit REAL DEFAULT 1000,"
         "blocked INTEGER DEFAULT 0,"
         "block_days INTEGER DEFAULT 0,"
@@ -463,6 +462,12 @@ bool Database::updatePassword(const string& username, const string& newHashedPwd
     bool ok=(sqlite3_step(stmt)==SQLITE_DONE);
     sqlite3_finalize(stmt);
     return ok;
+}
+bool Database::resetDailyBets()
+{
+    const char* sql =
+        "UPDATE users SET daily_bet_count = 0";
+    return sqlite3_exec(db, sql, nullptr, nullptr, nullptr) == SQLITE_OK;
 }
 
 
