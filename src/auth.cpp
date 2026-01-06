@@ -45,30 +45,35 @@
         return ch;
 
     }
-    string Authenication::HiddenPWD() //function to display passwords in secured way
+    string Authenication::HiddenPWD()
     {
         string password;
-        char c;
-        while((c=mygetch())!='\n') //enter
+        int c;
+
+        while (true)
         {
-            if(c=='\b')
+            c = mygetch();
+
+            if (c == '\n' || c == '\r')
+                break;
+
+            if (c == 127 || c == '\b')   // backspace na macOS = 127
             {
-                if(!password.empty())
+                if (!password.empty())
                 {
-                    cout<<"\b \b"; //backspace 
+                    cout << "\b \b";
                     password.pop_back();
                 }
-
             }
             else
             {
-                password +=c; //password changed to stars
-                cout<<"*";
+                password += (char)c;
+                cout << "*";
             }
         }
-        cout<<endl;
+        cout << endl;
         return password;
-    }
+}
 #endif
 Authenication::Authenication(vector <User>& u, Database& database): users(u), db(database) {}; //constructor for authenication with vector of all users 
 void Authenication::RegisterUser() //registering new user 
@@ -185,7 +190,7 @@ bool Authenication::readValidPassword(string& password)
         cout << "Enter password (empty=cancel): ";
         password = HiddenPWD();
         if(password.empty()) {
-            return false; // Cancelled
+            return false; 
         }
         if (isPasswordValid(password)) {
             return true;
@@ -197,9 +202,7 @@ bool Authenication::readValidPassword(string& password)
 bool Authenication::ChangePassword(Database& db, User& user)
 {
     cout << "Enter current password:\n";
-    string oldPwd = HiddenPWD();
-
-    // sprawdzenie starego hasła
+    string oldPwd=HiddenPWD();
     if(to_string(hashPWD(oldPwd))!=user.getPassword())
     {
         cout << "Incorrect current password\n";
