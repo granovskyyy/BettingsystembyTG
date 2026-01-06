@@ -49,7 +49,7 @@ README.md
 ### 1) **Compile SQLite first**
 
 ```bash
-gcc -c sqlite3.c -o sqlite3.o
+gcc -c sqlite/sqlite3.c -o sqlite3.o
 ```
 
 ### 2) **Compile and link the project**
@@ -66,11 +66,7 @@ g++ src/*.cpp sqlite3.o -Iinclude -lws2_32 -o out.exe
 g++ src/*.cpp sqlite3.o -Iinclude -o out
 ```
 
-If you prefer linking with the object file:
 
-```bash
-g++ *.cpp sqlite3.o -o out
-```
 
 ### 3) MAKEFILE (in build)
 

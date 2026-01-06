@@ -220,27 +220,27 @@ void App::EventMenu(User& user)
                 break;
             case 1:
                 league="LaLiga";
-                filepath="data/teams/laliga.txt"; //YOUR FILEPATH HERE
+                filepath="data/teams/laliga.txt"; 
                 break;
             case 2:
                 league="PremierLeague";
-                filepath="data/teams/premierleague.txt"; //YOUR FILEPATH HERE
+                filepath="data/teams/premierleague.txt"; 
                 break;     
             case 3:
                 league="Bundesliga";
-                filepath="data/teams/bundesliga.txt"; //YOUR FILEPATH HERE
+                filepath="data/teams/bundesliga.txt"; 
                 break;  
             case 4:
                 league="SerieA";
-                filepath="data/teams/seriea.txt"; //YOUR FILEPATH HERE
+                filepath="data/teams/seriea.txt"; 
                 break;      
             case 5:
                 league="Ekstraklasa";
-                filepath="data/teams/eklapa.txt"; //YOUR FILEPATH HERE
+                filepath="data/teams/eklapa.txt"; 
                 break;
             case 6:
                 league="1liga";
-                filepath="data/teams/1liga.txt"; //YOUR FILEPATH HERE
+                filepath="data/teams/1liga.txt"; 
                 break;
             case 7:
                 if(leagues.empty())
@@ -251,8 +251,8 @@ void App::EventMenu(User& user)
                 for(auto& l:leagues)
                 {
                     bets.resolveLeague(l);
-                    userManagment.processTimeStep();
                 }
+                userManagment.processTimeStep();
                 continue;
             default:
                 cout<<"Invalid option "<<endl;
