@@ -72,7 +72,7 @@ void App:: UserMenu(User & user)
         cout<<"1. Coupons\n";
         cout<<"2. Wallet \n";
         cout<<"3. Events today\n";
-        cout<<"4. Account Managment\n";
+        cout<<"4. Account Management\n";
         cout<<"0. Logout"<<endl;
         op=readInt(0,4);
         switch(op)

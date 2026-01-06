@@ -214,8 +214,14 @@ bool Authenication::ChangePassword(Database& db, User& user)
         cout << "Password change cancelled\n";
         return false;
     }
+    if (hashPWD(newPwd) == hashPWD(oldPwd))
+    {
+        cout << "New password must be different from old password\n";
+        return false;
+    }
 
     string hashed = to_string(hashPWD(newPwd));
+
 
     if(!db.updatePassword(user.getUsername(), hashed))
     {
