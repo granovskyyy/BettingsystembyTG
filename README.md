@@ -9,7 +9,6 @@ Designed to run locally on Windows or UNIX systems.
 
 * **C++**
 * **SQLite** (included: `sqlite3.c` & `sqlite3.h`)
-* **Makefile** (optional)
 
 ---
 
@@ -28,7 +27,6 @@ Designed to run locally on Windows or UNIX systems.
 main.cpp           # program entry point
 sqlite3.c          #sqlite files 
 sqlite3.h
-Makefile
 README.md
 ```
 ## PROJECT STRUCTURE 
@@ -64,16 +62,6 @@ g++ src/*.cpp sqlite3.o -Iinclude -lws2_32 -o out.exe
 
 ```bash
 g++ src/*.cpp sqlite3.o -Iinclude -o out
-```
-
-
-
-### 3) MAKEFILE (in build)
-
-If a Makefile is provided:
-
-```bash
-make
 ```
 
 ---
