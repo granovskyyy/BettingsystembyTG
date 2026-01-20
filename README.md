@@ -31,7 +31,7 @@ sqlite3.h
 Makefile
 README.md
 ```
-#PROJECT STRUCTURE 
+## PROJECT STRUCTURE 
 ```
 /src - .cpp files
 /include - .h files
