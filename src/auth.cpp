@@ -2,7 +2,7 @@
 #include <string.h> 
 //to secure passwords
 #include "auth.h"
-#if defined(_WIN64) 
+#if defined(_WIN64) //windows specific
     int Authenication::mygetch()
     {
         return _getch();
@@ -31,7 +31,7 @@
         cout<<endl;
         return password;
     }
-#else
+#else //unix specific
     int Authenication::mygetch() //special getch function for linux/macos users 
     {
         int ch;
@@ -152,7 +152,7 @@ User Authenication::LoginSystem() //logging to system
 }
 unsigned int Authenication::hashPWD(const string& password)
 {
-    int result=0;
+    int result=0; //securing password by hashing it
     for (char c:password)
     {
         result += c+(result<<3) + (result<<9) -result;
@@ -162,7 +162,7 @@ unsigned int Authenication::hashPWD(const string& password)
 }
 bool Authenication::isPasswordValid(const string& password)
 {
-    if (password.length() < 8) {
+    if (password.length() < 8) { //checking password validity
         cout<<"Password must be at least 8 characters long.\n";
         return false;
     }
@@ -185,7 +185,7 @@ bool Authenication::readValidPassword(string& password)
         cout << "Enter password (empty=cancel): ";
         password = HiddenPWD();
         if(password.empty()) {
-            return false; // Cancelled
+            return false; // cancelled
         }
         if (isPasswordValid(password)) {
             return true;
@@ -199,7 +199,7 @@ bool Authenication::ChangePassword(Database& db, User& user)
     cout << "Enter current password:\n";
     string oldPwd = HiddenPWD();
 
-    // sprawdzenie starego hasła
+    // old password verification
     if(to_string(hashPWD(oldPwd))!=user.getPassword())
     {
         cout << "Incorrect current password\n";

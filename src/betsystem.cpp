@@ -37,27 +37,27 @@ vector <Bet> BetSystem::getUserBets(const string& username)
 {
     return db.getUserBets(username);
 }
-string BetSystem::MatchPredictor()
+string BetSystem::MatchPredictor() 
 {
     int r=rand()%100;
     if(r<30)
     {
-        return "1";
+        return "1";  //team 1 wins
     }
     else if(r<70)
     {
-        return "X";
+        return "X"; //draw
     }
     else
     {
-        return "2";
+        return "2"; //team 2 wins
     }
 }
 void BetSystem::resolveBets(const string& league)
 {
-    auto matches=db.getMatches(league);
+    auto matches=db.getMatches(league);  
     auto bets=db.getPendingBets(league);
-    for(auto& b:bets)
+    for(auto& b:bets) //won bet 
     {
         string result=MatchPredictor();
         db.updateBetResult(b.id,result);
@@ -70,14 +70,14 @@ void BetSystem::resolveBets(const string& league)
             db.updateBetStatus(b.id,"WON");
             db.updateBalance(b.username,newBalance);
         }
-        else{
+        else{ //lost bet 
             db.updateBetStatus(b.id,"LOST");
         }
     }
 }
 void BetSystem::resolveMatches(const string& league)
 {
-    auto matches=db.getMatchesID(league);
+    auto matches=db.getMatchesID(league); 
     for(auto& m:matches)
     {
         string result=MatchPredictor();
