@@ -292,7 +292,7 @@ void App::ShowActiveBets(User& user)
         if(b.status=="PENDING")
         {
             any=true;
-            cout<<"Match: "<<b.team1<<" vs"<<b.team2<<endl;
+            cout<<"Match: "<<b.team1<<" vs "<<b.team2<<endl;
             cout<<"League: "<<b.league<<endl;
             cout<<"Bet: "<<b.bet_type<<" @ "<<b.odds<<endl;
             cout<<"Stake: "<<b.stake<<endl;
@@ -318,7 +318,7 @@ void App::ShowBetHistory(User& user)
         if(b.status=="WON"||b.status=="LOST")
         {
             any=true;
-            cout<<"Match: "<<b.team1<<" vs"<<b.team2<<endl;
+            cout<<"Match: "<<b.team1<<" vs "<<b.team2<<endl;
             cout<<"League: "<<b.league<<endl;
             cout<<"Bet: "<<b.bet_type<<" @ "<<b.odds<<endl;
             cout<<"Stake: "<<b.stake<<endl;
