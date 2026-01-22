@@ -1,8 +1,9 @@
+out
 *.o
 *.exe
-*.out
+*.out§
 *.db
-out/
+
 .vscode/
 .DS_Store
 Thumbs.db
