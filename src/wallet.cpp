@@ -51,7 +51,7 @@ void Wallet::setWithdrawalLimit(User& user)
 {
     double newlimit;
     cout<<"Enter withdrawal limit"<<endl;
-    cout<<"Current limit: "<<db.getWithdrawalLimit(user.getUsername())<<endl;
+    cout<<"Current limit: "<<db.getWithdrawalLimit(user.getUsername())<<endl; //getting actual limit from database
     cin>>newlimit;
     if(!cin ||newlimit<=0)
     {
