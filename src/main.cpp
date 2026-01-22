@@ -6,12 +6,7 @@
 using namespace std;
 int main()
 {
-
     Database db("data/users.db");
     App app(db);
     app.Run();
-
-   
-
-
 }
