@@ -2,12 +2,7 @@
 #include <string.h> 
 //to secure passwords
 #include "auth.h"
-<<<<<<< HEAD
 #if defined(_WIN64) 
-using namespace std;
-=======
-#if defined(_WIN64) //windows specific
->>>>>>> ec21d4e8cbd20c78544ff4816f374226da0ee48f
     int Authenication::mygetch()
     {
         return _getch();
@@ -36,14 +31,7 @@ using namespace std;
         cout<<endl;
         return password;
     }
-<<<<<<< HEAD
 #else
-string Authenication::HiddenPWD()
-{
-    string password;
-    char ch;
-=======
-#else //unix specific
     int Authenication::mygetch() //special getch function for linux/macos users 
     {
         int ch;
@@ -55,43 +43,32 @@ string Authenication::HiddenPWD()
         ch = getchar();
         tcsetattr(STDIN_FILENO, TCSANOW, &old_settings);
         return ch;
->>>>>>> ec21d4e8cbd20c78544ff4816f374226da0ee48f
 
-    termios oldt{};
-    tcgetattr(STDIN_FILENO, &oldt);
-
-    termios newt = oldt;
-    newt.c_lflag &= ~(ICANON | ECHO);
-    tcsetattr(STDIN_FILENO, TCSANOW, &newt);
-
-    while (true)
+    }
+    string Authenication::HiddenPWD() //function to display passwords in secured way
     {
-        ssize_t n = read(STDIN_FILENO, &ch, 1);
-        if (n <= 0) break;
-
-        if (ch == '\n')
-            break;
-
-        if (ch == 127)  // Backspace on macOS
+        string password;
+        char c;
+        while((c=mygetch())!='\n') //enter
         {
-            if (!password.empty())
+            if(c=='\b')
             {
-                password.pop_back();
-                write(STDOUT_FILENO, "\b \b", 3);
+                if(!password.empty())
+                {
+                    cout<<"\b \b"; //backspace 
+                    password.pop_back();
+                }
+
+            }
+            else
+            {
+                password +=c; //password changed to stars
+                cout<<"*";
             }
         }
-        else
-        {
-            password.push_back(ch);
-            write(STDOUT_FILENO, "*", 1);
-        }
+        cout<<endl;
+        return password;
     }
-
-    tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
-    write(STDOUT_FILENO, "\n", 1);
-
-    return password;
-}
 #endif
 Authenication::Authenication(vector <User>& u, Database& database): users(u), db(database) {}; //constructor for authenication with vector of all users 
 void Authenication::RegisterUser() //registering new user 
@@ -208,11 +185,7 @@ bool Authenication::readValidPassword(string& password)
     while (true) {
         password = HiddenPWD();
         if(password.empty()) {
-<<<<<<< HEAD
-            return false; 
-=======
-            return false; // cancelled
->>>>>>> ec21d4e8cbd20c78544ff4816f374226da0ee48f
+            return false; // Cancelled
         }
         if (isPasswordValid(password)) {
             return true;
@@ -224,13 +197,9 @@ bool Authenication::readValidPassword(string& password)
 bool Authenication::ChangePassword(Database& db, User& user)
 {
     cout << "Enter current password:\n";
-<<<<<<< HEAD
-    string oldPwd=HiddenPWD();
-=======
     string oldPwd = HiddenPWD();
 
-    // old password verification
->>>>>>> ec21d4e8cbd20c78544ff4816f374226da0ee48f
+    // sprawdzenie starego hasła
     if(to_string(hashPWD(oldPwd))!=user.getPassword())
     {
         cout << "Incorrect current password\n";
