@@ -2,8 +2,12 @@
 #include <string.h> 
 //to secure passwords
 #include "auth.h"
+<<<<<<< HEAD
 #if defined(_WIN64) 
 using namespace std;
+=======
+#if defined(_WIN64) //windows specific
+>>>>>>> ec21d4e8cbd20c78544ff4816f374226da0ee48f
     int Authenication::mygetch()
     {
         return _getch();
@@ -32,11 +36,26 @@ using namespace std;
         cout<<endl;
         return password;
     }
+<<<<<<< HEAD
 #else
 string Authenication::HiddenPWD()
 {
     string password;
     char ch;
+=======
+#else //unix specific
+    int Authenication::mygetch() //special getch function for linux/macos users 
+    {
+        int ch;
+        struct termios old_settings, new_settings;
+        tcgetattr(STDIN_FILENO, &old_settings);
+        new_settings = old_settings;
+        new_settings.c_lflag &= ~(ICANON | ECHO);
+        tcsetattr(STDIN_FILENO, TCSANOW, &new_settings);
+        ch = getchar();
+        tcsetattr(STDIN_FILENO, TCSANOW, &old_settings);
+        return ch;
+>>>>>>> ec21d4e8cbd20c78544ff4816f374226da0ee48f
 
     termios oldt{};
     tcgetattr(STDIN_FILENO, &oldt);
@@ -157,7 +176,7 @@ User Authenication::LoginSystem() //logging to system
 }
 unsigned int Authenication::hashPWD(const string& password)
 {
-    int result=0;
+    int result=0; //securing password by hashing it
     for (char c:password)
     {
         result += c+(result<<3) + (result<<9) -result;
@@ -167,7 +186,7 @@ unsigned int Authenication::hashPWD(const string& password)
 }
 bool Authenication::isPasswordValid(const string& password)
 {
-    if (password.length() < 8) {
+    if (password.length() < 8) { //checking password validity
         cout<<"Password must be at least 8 characters long.\n";
         return false;
     }
@@ -189,7 +208,11 @@ bool Authenication::readValidPassword(string& password)
     while (true) {
         password = HiddenPWD();
         if(password.empty()) {
+<<<<<<< HEAD
             return false; 
+=======
+            return false; // cancelled
+>>>>>>> ec21d4e8cbd20c78544ff4816f374226da0ee48f
         }
         if (isPasswordValid(password)) {
             return true;
@@ -201,7 +224,13 @@ bool Authenication::readValidPassword(string& password)
 bool Authenication::ChangePassword(Database& db, User& user)
 {
     cout << "Enter current password:\n";
+<<<<<<< HEAD
     string oldPwd=HiddenPWD();
+=======
+    string oldPwd = HiddenPWD();
+
+    // old password verification
+>>>>>>> ec21d4e8cbd20c78544ff4816f374226da0ee48f
     if(to_string(hashPWD(oldPwd))!=user.getPassword())
     {
         cout << "Incorrect current password\n";
